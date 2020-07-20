@@ -1,11 +1,11 @@
 const path = require('path');
-const uuid = require('uuid');
 const { Op } = require("sequelize");
 const sequelize = require('sequelize');
 
 const env = process.env.NODE_ENV || 'test';
 
 const db = require('../src/db/models');
+//const { Box, Product } = require('../../db/models');
 const Product = db['Product'];
 const Box = db['Box'];
 const BoxProduct = db['BoxProduct'];
@@ -15,82 +15,41 @@ const Subscription = db['Subscription'];
 const SubscriptionType = db['SubscriptionType'];
 const ShopifyBox = db['ShopifyBox'];
 
+/*
+const { setUp, tearDown } = require('./initdb');
+
 beforeAll(async () => {
-  await db.sequelize.sync({ alter: true });
-  await db.sequelize.authenticate();
-
-  const shopifyBox = ShopifyBox.build({
-    shopify_product_id: 31792460398333,
-  });
-  await shopifyBox.save();
-
-  const box = await Box.create({
-    shopify_title: "Small Box",
-    shopify_gid: "gid://shopify/Product/4502212345333",
-    shopify_handle: "small-box",
-    shopify_variant_id: 31792460398333,
-    shopify_price: 2500,
-    delivered: new Date(),
-  });
-
-  shopifyBox.addBox(box);
-
-
-  const subscriptionType = SubscriptionType.build({
-    duration: 0,
-    frequency: 7,
-  });
-  await subscriptionType.save();
-  shopifyBox.addSubscriptionType(subscriptionType);
-  await shopifyBox.save();
-
-  const subscriber = Subscriber.build({
-    shopify_customer_id: "4502212345999",
-  });
-  await subscriber.save();
-
-  const subscription = Subscription.build({
-    shopify_product_id: 31792460398333,
-    current_cart: {},
-    last_cart: {},
-  });
-  await subscription.save();
-  subscription.setSubscriptionType(subscriptionType);
-  await subscription.save();
-  subscription.setSubscriber(subscriber);
-  await subscription.save();
-
-  const order = Order.build({
-    shopify_title: "Small Box",
-    shopify_order_id: 4502212345333,
-    shopify_line_item_id: 31792460398333,
-  });
-  /* note the save everytime! otherwise we make a new order every time!!! */
-  await order.save();
-  order.setBox(box)
-  await order.save();
-  order.setSubscription(subscription)
-  await order.save();
-  order.setSubscriber(subscriber)
-  await order.save();
-  shopifyBox.addOrder(order);
-  await order.save();
-
+  await setUp();
 });
+
+afterAll(async () => {
+  await tearDown();
+});
+*/
 
 test('node env is test', () => expect(process.env.NODE_ENV).toBe('test'));
 
 test('get product', async () => {
-  const product = await Product.findOne({ include: Box });
-  console.log(JSON.stringify(product, null, 2));
+  const product = await Product.findOne(
+    {
+      include: {
+        model: Box,
+        as: 'boxes',
+      },
+    }
+  );
+  //console.log(JSON.stringify(product, null, 2));
+  expect(product.boxes[0].shopify_title).toBe('Small Box');
   const box = await Box.findOne({ include: {
     model: Product,
     attributes: ['shopify_title'],
+    as: 'products',
     through: {
       attributes: ['isAddOn'],
     }
   }});
-  console.log(JSON.stringify(box, null, 2));
+  //console.log(JSON.stringify(box, null, 2));
+  expect(box.shopify_title).toBe('Small Box');
 });
 
 test('get order', async () => {
@@ -111,6 +70,7 @@ test('get order', async () => {
         include: {
           model: Product,
           attributes: ['shopify_title'],
+          as: 'products',
           through: {
             attributes: ['isAddOn'],
           }
@@ -166,8 +126,15 @@ test('get order', async () => {
       },
     ]
   });
-  console.log(JSON.stringify(order, null, 2));
+  //console.log(JSON.stringify(order, null, 2));
   //console.log(JSON.stringify(await Order.count(), null, 2));
+  expect(order.Box.shopify_title).toBe('Small Box');
+  expect(order.Box.products.length).toBe(2);
+  expect(order.Subscriber.shopify_customer_id).toBe(4502212345999);
+  expect(order.Subscriber.Orders.length).toBe(1);
+  expect(order.Subscriber.Subscriptions.length).toBe(1);
+  expect(order.Subscription.Orders.length).toBe(1);
+  expect(order.Subscription.SubscriptionType.ShopifyBox.shopify_product_id).toBe(31792460398333);
 });
 
 test('get order by delivery and count', async () => {
@@ -183,41 +150,25 @@ test('get order by delivery and count', async () => {
       },
     ]
   });
-  console.log(JSON.stringify(dates, null, 2));
+  //console.log(JSON.stringify(dates, null, 2));
+  //expect(dates.length).toBe(1);
 });
 
 test('get products by addon', async () => {
   const box = await Box.findOne({
     include: {
       model: Product,
+      as: 'products',
       attributes: ['shopify_title'],
       through: {
         attributes: ['isAddOn'],
       }
     },
   });
+  //expect(box.products.length).toBe(2);
+  /*
   console.log(JSON.stringify(box, null, 2));
-  const productOne = await Product.create({
-    shopify_title: "Green Beans",
-    shopify_id: 4502212345444,
-    shopify_gid: "gid://shopify/Product/4502212345444",
-    shopify_handle: "green-beans",
-    shopify_variant_id: 31792460398444,
-    shopify_price: 450,
-    available: true,
-  });
-
-  const productTwo = await Product.create({
-    shopify_title: "Agria Potato",
-    shopify_id: 4502212345914,
-    shopify_gid: "gid://shopify/Product/4502212345914",
-    shopify_handle: "agria-potato",
-    shopify_variant_id: 31792460398650,
-    shopify_price: 450,
-    available: true,
-  });
-  await productTwo.addBox(box, { through: { isAddOn: false } });
-  await productOne.addBox(box, { through: { isAddOn: true } });
+  console.log(box.products.length);
   /*
   console.log(productTwo.id, productTwo.id);
   await BoxProduct.create({
@@ -231,10 +182,11 @@ test('get products by addon', async () => {
     isAddOn: true,
   });
   */
-  const product = await Product.findAll({
+  const products = await Product.findAll({
     include: [
       {
         model: Box,
+        as: 'boxes',
         attributes: ['shopify_title'],
         through: {
           attributes: ['isAddOn'],
@@ -242,11 +194,6 @@ test('get products by addon', async () => {
       },
     ]
   });
-  console.log(JSON.stringify(product, null, 2));
+  //console.log(JSON.stringify(products, null, 2));
+  expect(products.length).toBe(2)
 });
-
-afterAll(async () => {
-  await db.sequelize.drop();
-  await db.sequelize.close();
-});
-

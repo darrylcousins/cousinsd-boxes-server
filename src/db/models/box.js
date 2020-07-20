@@ -27,8 +27,11 @@ module.exports = (sequelize, DataTypes) => {
     //Box.belongsToMany(models.Subscription, { through: 'BoxSubscription', targetKey: 'shopify_product_id' });
     Box.hasMany(models.Order);
     Box.hasMany(models.BoxProduct);
-    Box.belongsToMany(models.Product, { through: models.BoxProduct });
+    Box.belongsToMany(models.Product, { through: models.BoxProduct, as: 'products' });
     Box.belongsTo(models.ShopifyBox);
+  };
+  Box.prototype.addOnProducts = function(params) {
+    console.log(params);
   };
   return Box;
 };

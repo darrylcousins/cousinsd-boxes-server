@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Product.associate = function(models) {
     // associations can be defined here
-    Product.belongsToMany(models.Box, { through: models.BoxProduct });
+    Product.belongsToMany(models.Box, { through: models.BoxProduct, as: 'boxes', });
     Product.hasMany(models.BoxProduct);
   };
   return Product;
