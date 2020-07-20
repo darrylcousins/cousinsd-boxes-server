@@ -1,24 +1,20 @@
 const { Op } = require("sequelize");
 const { Box, Product } = require('../../db/models');
-const { dateToISOString } = require('../../lib');
+const { dateToISOString, filterFields } = require('../../lib');
 const sequelize = require('sequelize');
+const parseFields = require('graphql-parse-fields')
 
 const resolvers = {
   Box: {
-    /*
     async products(instance, args, context, info) {
-      const prods = await instance.getProducts({ order: [['title', 'ASC']] });
-      return prods.filter(product => !product.BoxProduct.isAddOn);
+      return instance.Products.filter(product => !product.BoxProduct.isAddOn);
     },
     async addOnProducts(instance, args, context, info) {
-      const prods = await instance.getProducts({ order: [['title', 'ASC']] });
-      return prods.filter(product => product.BoxProduct.isAddOn);
+      return instance.Products.filter(product => product.BoxProduct.isAddOn);
     },
-    */
   },
   Query: {
     async getBox(root, { input }, { models }, info){
-      // graphql does not include products
       const { id } = input;
       const box = await Box.findOne({ 
         where: { id },
@@ -26,15 +22,13 @@ const resolvers = {
       return box;
     },
     async getAllBoxes(root, { input }, { models }, info) {
+      const fields = parseFields(info)
       const boxes = await Box.findAll({
+        attributes: filterFields(fields),
         include: [
           {
             model: Product,
-            as: 'products',
-            attributes: [
-              'shopify_title',
-              'shopify_handle',
-            ],
+            attributes: filterFields(fields.products).filter(el => el !== 'isAddOn'),
             through: {
               attributes: ['isAddOn'],
             }

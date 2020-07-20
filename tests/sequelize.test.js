@@ -5,27 +5,16 @@ const sequelize = require('sequelize');
 const env = process.env.NODE_ENV || 'test';
 
 const db = require('../src/db/models');
-//const { Box, Product } = require('../../db/models');
-const Product = db['Product'];
-const Box = db['Box'];
-const BoxProduct = db['BoxProduct'];
-const Order = db['Order'];
-const Subscriber = db['Subscriber'];
-const Subscription = db['Subscription'];
-const SubscriptionType = db['SubscriptionType'];
-const ShopifyBox = db['ShopifyBox'];
-
-/*
-const { setUp, tearDown } = require('./initdb');
-
-beforeAll(async () => {
-  await setUp();
-});
-
-afterAll(async () => {
-  await tearDown();
-});
-*/
+const { 
+  Box,
+  Product,
+  BoxProduct,
+  Order,
+  Subscriber,
+  Subscription,
+  SubscriptionType,
+  ShopifyBox,
+} = require('../src/db/models');
 
 test('node env is test', () => expect(process.env.NODE_ENV).toBe('test'));
 
@@ -34,16 +23,14 @@ test('get product', async () => {
     {
       include: {
         model: Box,
-        as: 'boxes',
       },
     }
   );
   //console.log(JSON.stringify(product, null, 2));
-  expect(product.boxes[0].shopify_title).toBe('Small Box');
+  expect(product.Boxes[0].shopify_title).toBe('Small Box');
   const box = await Box.findOne({ include: {
     model: Product,
     attributes: ['shopify_title'],
-    as: 'products',
     through: {
       attributes: ['isAddOn'],
     }
@@ -70,7 +57,6 @@ test('get order', async () => {
         include: {
           model: Product,
           attributes: ['shopify_title'],
-          as: 'products',
           through: {
             attributes: ['isAddOn'],
           }
@@ -129,7 +115,7 @@ test('get order', async () => {
   //console.log(JSON.stringify(order, null, 2));
   //console.log(JSON.stringify(await Order.count(), null, 2));
   expect(order.Box.shopify_title).toBe('Small Box');
-  expect(order.Box.products.length).toBe(2);
+  expect(order.Box.Products.length).toBe(2);
   expect(order.Subscriber.shopify_customer_id).toBe(4502212345999);
   expect(order.Subscriber.Orders.length).toBe(1);
   expect(order.Subscriber.Subscriptions.length).toBe(1);
@@ -158,17 +144,16 @@ test('get products by addon', async () => {
   const box = await Box.findOne({
     include: {
       model: Product,
-      as: 'products',
       attributes: ['shopify_title'],
       through: {
         attributes: ['isAddOn'],
       }
     },
   });
-  //expect(box.products.length).toBe(2);
+  //expect(box.Products.length).toBe(2);
   /*
   console.log(JSON.stringify(box, null, 2));
-  console.log(box.products.length);
+  console.log(box.Products.length);
   /*
   console.log(productTwo.id, productTwo.id);
   await BoxProduct.create({
@@ -186,7 +171,6 @@ test('get products by addon', async () => {
     include: [
       {
         model: Box,
-        as: 'boxes',
         attributes: ['shopify_title'],
         through: {
           attributes: ['isAddOn'],

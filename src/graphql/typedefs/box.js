@@ -15,6 +15,7 @@ const box = gql`
     createdAt: String!
     updatedAt: String!
     products: [Product]
+    addOnProducts: [Product]
   }
 
   type BoxDate {

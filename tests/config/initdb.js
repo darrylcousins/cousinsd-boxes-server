@@ -1,13 +1,14 @@
 const db = require('../../src/db/models');
-//const { Box, Product } = require('../../db/models');
-const Product = db['Product'];
-const Box = db['Box'];
-const BoxProduct = db['BoxProduct'];
-const Order = db['Order'];
-const Subscriber = db['Subscriber'];
-const Subscription = db['Subscription'];
-const SubscriptionType = db['SubscriptionType'];
-const ShopifyBox = db['ShopifyBox'];
+const { 
+  Box,
+  Product,
+  BoxProduct,
+  Order,
+  Subscriber,
+  Subscription,
+  SubscriptionType,
+  ShopifyBox,
+} = require('../../src/db/models');
 
 const tearDown = async () => {
   await db.sequelize.drop();

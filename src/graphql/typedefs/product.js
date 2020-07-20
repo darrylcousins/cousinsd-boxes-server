@@ -12,6 +12,7 @@ const product = gql`
     createdAt: String!
     updatedAt: String!
     boxes: [Box]
+    isAddOn: Boolean
   }
 
   input ProductInput {
@@ -26,13 +27,12 @@ const product = gql`
 
   input ProductUpdateInput {
     id: ID!
-    title: String
-    available: Boolean
+    shopify_title: String
     shopify_id: BigInt
-    shopify_gid: String
     shopify_handle: String!
     shopify_variant_id: BigInt!
     shopify_price: Int!
+    available: Boolean
   }
 
   input ProductIdInput{

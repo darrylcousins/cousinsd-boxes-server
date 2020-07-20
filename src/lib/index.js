@@ -1,4 +1,6 @@
 const fetch = require('isomorphic-fetch');
+const parseFields = require('graphql-parse-fields')
+const { Source } = require('graphql');
 
 const getPdf = (dd) => {
   return fetch(`${HOST}/pdf`, {
@@ -73,6 +75,22 @@ const getFieldsFromInfo = (info) => {
   return ['id'];
 };
 
+const getQueryFields = (query) => {
+  const definitions = new Source(query).body.definitions;
+  if (definitions.length === 1) {
+    const ast = definitions[0].selectionSet.selections;
+    return parseFields(ast);
+  } else {
+    // TODO surely exists a package that does this better and I don't even know
+    // if definitions.length is ever greater than 1
+    throw 'got more than one definition';
+  }
+};
+
+const filterFields = (fields) => {
+  return Object.keys(fields).filter(key => (key !== '__typename') && (typeof fields[key] === 'boolean') );
+};
+
 const findErrorMessage = (error) => {
   if (!error) return error;
   if ('errors' in error) {
@@ -136,6 +154,8 @@ const makeThrottledPromise = (observable, count) => {
 }
 
 module.exports = {
+  getQueryFields,
+  filterFields,
   dateToISOString,
   nameSort,
   keySort,
