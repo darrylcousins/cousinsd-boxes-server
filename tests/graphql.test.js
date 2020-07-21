@@ -13,11 +13,15 @@ test('hello', async () => {
 });
 
 test('get all boxes', async () => {
+  debugger;
   const { data } = await client.query({
     query: GET_ALL_BOXES
-    });
+  });
+  const fields = getQueryFields(GET_ALL_BOXES);
+  //console.log(data);
+  /*
   const boxes = data.getAllBoxes;
-  const fields = getQueryFields(GET_ALL_BOXES).getAllBoxes;
+  const fields = getQueryFields(GET_ALL_BOXES);
 
   const boxFields = filterFields(fields);
   const boxKeys = Object.keys(boxes[0]);
@@ -29,4 +33,5 @@ test('get all boxes', async () => {
 
   const addOnProductKeys = Object.keys(boxes[0].addOnProducts[0]);
   expect(productFields.filter(field => addOnProductKeys.indexOf(field) === -1).length).toBe(0);
+  */
 });

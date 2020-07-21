@@ -77,6 +77,15 @@ const getFieldsFromInfo = (info) => {
 
 const getQueryFields = (query) => {
   const definitions = new Source(query).body.definitions;
+  definitions.forEach(def => {
+    if (def.selectionSet.selections) {
+      let aaa = def.selectionSet.selections;
+      console.log('fondun selections', parseFields(aaa));
+    } else {
+      console.log('NO SEL', def.selectionSet);
+    }
+    //console.log(parseFields(aaa));
+  });
   if (definitions.length === 1) {
     const ast = definitions[0].selectionSet.selections;
     return parseFields(ast);

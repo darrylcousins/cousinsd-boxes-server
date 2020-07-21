@@ -38,6 +38,7 @@ const resolvers = {
       return boxes;
     },
     async getBoxes(root, { input }, { models }, info) {
+      console.log('HERE');
       let { delivered } = input;
       if (!delivered) delivered = dateToISOString(new Date());
       const boxes = await Box.findAll({
