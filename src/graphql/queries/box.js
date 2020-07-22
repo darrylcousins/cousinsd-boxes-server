@@ -1,61 +1,44 @@
 const { gql } = require('@apollo/client');
 //const { FRAGMENT_PRODUCT_ARRAY } = require('./product');
 
-
-const FUCK = gql`
-  query {
-    getAllBoxes {
-      id
-      shopify_title
-      shopify_handle
-      shopify_variant_id
-      shopify_price
-      delivered
-      products {
-        id
-        isAddOn
-        shopify_title
-        shopify_handle
-        shopify_id
-        shopify_variant_id
-        shopify_price
-        available
-      }
-      addOnProducts {
-        id
-        isAddOn
-        shopify_title
-        shopify_handle
-        shopify_id
-        shopify_variant_id
-        shopify_price
-        available
-      }
-    }
-  }
+const ProductParts = `
+  id
+  isAddOn
+  shopify_title
+  shopify_handle
+  shopify_id
+  shopify_variant_id
+  shopify_price
+  available
 `;
 
-const PRODUCT_BITS = gql`
-  fragment productBits on Product {
-    id
-  }
+const BoxParts = `
+  id
+  shopify_title
+  shopify_handle
+  shopify_variant_id
+  shopify_price
+  delivered
+  createdAt
 `;
 
-const GET_ALL_BOXES = gql`
+// two fragments are identical but wouldn't work on a single definition
+const BoxQueries = {
+  getAllBoxes: gql`
     query {
       getAllBoxes {
-        id
+        ${BoxParts}
         products {
-          ...productBits
+          ${ProductParts}
         }
         addOnProducts {
-          id
+          ${ProductParts}
         }
       }
     }
-    ${PRODUCT_BITS}
-`;
+  `,
+}
 
 module.exports = {
-  GET_ALL_BOXES
+  BoxQueries,
 };

@@ -4,7 +4,7 @@ const sequelize = require('sequelize');
 
 const env = process.env.NODE_ENV || 'test';
 
-const db = require('../src/db/models');
+const db = require('../../src/db/models');
 const { 
   Box,
   Product,
@@ -14,7 +14,7 @@ const {
   Subscription,
   SubscriptionType,
   ShopifyBox,
-} = require('../src/db/models');
+} = require('../../src/db/models');
 
 test('node env is test', () => expect(process.env.NODE_ENV).toBe('test'));
 
@@ -136,8 +136,6 @@ test('get order by delivery and count', async () => {
       },
     ]
   });
-  //console.log(JSON.stringify(dates, null, 2));
-  //expect(dates.length).toBe(1);
 });
 
 test('get products by addon', async () => {
@@ -150,23 +148,10 @@ test('get products by addon', async () => {
       }
     },
   });
-  //expect(box.Products.length).toBe(2);
-  /*
-  console.log(JSON.stringify(box, null, 2));
-  console.log(box.Products.length);
-  /*
-  console.log(productTwo.id, productTwo.id);
-  await BoxProduct.create({
-    BoxId: box.id,
-    ProductId: productTwo.id,
-    isAddOn: false,
-  });
-  await BoxProduct.create({
-    BoxId: box.id,
-    ProductId: productOne.id,
-    isAddOn: true,
-  });
-  */
+  expect(box.Products.length).toBe(2);
+  expect(box.Products.filter(product => product.BoxProduct.isAddOn).length).toBe(1);
+  expect(box.Products.filter(product => !product.BoxProduct.isAddOn).length).toBe(1);
+
   const products = await Product.findAll({
     include: [
       {

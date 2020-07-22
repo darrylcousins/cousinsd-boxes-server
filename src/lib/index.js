@@ -77,23 +77,17 @@ const getFieldsFromInfo = (info) => {
 
 const getQueryFields = (query) => {
   const definitions = new Source(query).body.definitions;
+  let asts;
+  let fragments = {};
   definitions.forEach(def => {
-    if (def.selectionSet.selections) {
-      let aaa = def.selectionSet.selections;
-      console.log('fondun selections', parseFields(aaa));
-    } else {
-      console.log('NO SEL', def.selectionSet);
+    if (def.kind == 'OperationDefinition') {
+      asts = def.selectionSet.selections;
+    } else if (def.kind == 'FragmentDefinition' ) {
+      fragments[def.name.value] = def;
     }
-    //console.log(parseFields(aaa));
   });
-  if (definitions.length === 1) {
-    const ast = definitions[0].selectionSet.selections;
-    return parseFields(ast);
-  } else {
-    // TODO surely exists a package that does this better and I don't even know
-    // if definitions.length is ever greater than 1
-    throw 'got more than one definition';
-  }
+  // parseFields can have arguments : info OR asts, fragments
+  return parseFields(asts, fragments);
 };
 
 const filterFields = (fields) => {

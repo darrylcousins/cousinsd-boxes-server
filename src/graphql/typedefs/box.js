@@ -41,31 +41,14 @@ const box = gql`
   }
 
   input BoxSearchInput {
-    delivered: String
-  }
-
-  input BoxIdInput {
-    id: ID!
-  }
-
-  input BoxShopifyIdInput {
-    shopify_id: BigInt!
+    delivered: String!
+    offset: Int!
+    limit: Int!
   }
 
   extend type Query {
-    getBoxDates: [BoxDate]
-    getBox(input: BoxIdInput!): Box
     getAllBoxes: [Box]
-    getBoxes(input: BoxSearchInput!): [Box]
-    getCurrentBoxes(input: BoxSearchInput!): [Box]
-    getBoxProducts(input: BoxIdInput!): Box
-    getBoxesByShopifyId(input: BoxShopifyIdInput!): [Box]
-  }
-
-  extend type Mutation {
-    createBox(input: BoxInput!): Box
-    updateBox(input: BoxUpdateInput!): Box
-    deleteBox(input: BoxIdInput!): Int
+    getSelectedBoxes(input: BoxSearchInput): [Box]
   }
 `;
 
