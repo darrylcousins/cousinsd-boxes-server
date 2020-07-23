@@ -24,11 +24,6 @@ const getCsv = (data) => {
   })
 };
 
-const dateToISOString = (date) => {
-  date.setTime(date.getTime() + (12 * 60 * 60 * 1000));
-  return date.toISOString().slice(0, 10); // try this out later
-}
-
 const numberFormat = ({ amount, currencyCode }) => {
   let amt = amount * 0.01; // amount comes in at cent decimal value
   let locale = 'en-NZ';
@@ -75,19 +70,24 @@ const getFieldsFromInfo = (info) => {
   return ['id'];
 };
 
-const getQueryFields = (query) => {
+const mockResolveInfo = (query) => {
   const definitions = new Source(query).body.definitions;
-  let asts;
+  let fieldASTs;
   let fragments = {};
   definitions.forEach(def => {
     if (def.kind == 'OperationDefinition') {
-      asts = def.selectionSet.selections;
+      fieldASTs = def.selectionSet.selections;
     } else if (def.kind == 'FragmentDefinition' ) {
       fragments[def.name.value] = def;
     }
   });
+  return { fieldASTs, fragments };
+};
+
+const getQueryFields = (query) => {
+  const { fieldASTs, fragments } = mockResolveInfo(query);
   // parseFields can have arguments : info OR asts, fragments
-  return parseFields(asts, fragments);
+  return parseFields(fieldASTs, fragments);
 };
 
 const filterFields = (fields) => {
@@ -156,7 +156,35 @@ const makeThrottledPromise = (observable, count) => {
   });
 }
 
+const dateOnly = (date) => {
+  if (!date) {
+    date = new Date();
+  }
+  var year = date.getFullYear();
+  var month = date.getMonth();
+  var day = date.getDate();
+  return new Date(year,month,day);
+}
+
+const UTCDateOnly = (date) => {
+  if (!date) {
+    date = new Date();
+  }
+  var year = date.getFullYear();
+  var month = date.getMonth();
+  var day = date.getDate();
+  return new Date(Date.UTC(year,month,day));
+}
+
+const dateToISOString = (date) => {
+  date.setTime(date.getTime() + (12 * 60 * 60 * 1000));
+  return date.toISOString().slice(0, 10); // try this out later
+}
+
 module.exports = {
+  dateOnly,
+  UTCDateOnly,
+  mockResolveInfo,
   getQueryFields,
   filterFields,
   dateToISOString,

@@ -1,4 +1,4 @@
-const { Subscription } = require('../../db/models');
+const models = require('../../db/models');
 
 const resolvers = {
   Subscription: {
@@ -7,40 +7,40 @@ const resolvers = {
     },
   },
   Query: {
-    async getSubscription(root, { input }, { models }, info) {
+    async getSubscription(root, { input }, context, info) {
       const { uid } = input;
-      const subscription = await Subscription.findOne({ 
+      const subscription = await models.Subscription.findOne({ 
         where: { uid },
       });
       return subscription;
     },
-    async getSubscriptions(root, { input }, { models }, info) {
+    async getSubscriptions(root, { input }, context, info) {
       let { SubscriberId } = input;
-      const subscriptions = await Subscription.findAll({
+      const subscriptions = await models.Subscription.findAll({
         where: { SubscriberId },
       });
       return subscriptions;
     },
   },
   Mutation: {
-    async createSubscription (root, { input }, { models }, info) {
-      return Subscription.create(input);
+    async createSubscription (root, { input }, context, info) {
+      return models.Subscription.create(input);
     },
-    async updateSubscription (root, { input }, { models }, info) {
+    async updateSubscription (root, { input }, context, info) {
       const { uid, ...props } = input;
       console.log('update subscription input', input);
-      await Subscription.update(
+      await models.Subscription.update(
         props,
         { where: { uid } }
       );
-      return Subscription.findOne({ 
+      return models.Subscription.findOne({ 
         where: { uid },
       });
     },
-    async deleteSubscription (root, { input }, { models }, info) {
+    async deleteSubscription (root, { input }, context, info) {
       /* uid */
       const { uid } = input;
-      return Subscription.destroy({ where: { uid } });
+      return models.Subscription.destroy({ where: { uid } });
     },
   },
 };

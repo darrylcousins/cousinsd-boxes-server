@@ -23,6 +23,12 @@ const root = gql`
   type Mutation {
     _empty: String
   }
+
+  type DeliveredAndCount {
+    delivered: String!
+    count: Int!
+  }
+
 `;
 
 const typeDefs = [

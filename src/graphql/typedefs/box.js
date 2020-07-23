@@ -2,7 +2,6 @@ const { gql } = require('@apollo/client');
 
 /*
     orders: [Order]
-    shopify_box: [ShopifyBox]
     */
 const box = gql`
   type Box {
@@ -11,6 +10,8 @@ const box = gql`
     shopify_title: String!
     shopify_handle: String!
     shopify_variant_id: BigInt!
+    shopify_product_id: BigInt!
+    shopify_product_gid: String!
     shopify_price: Int!
     createdAt: String!
     updatedAt: String!
@@ -18,9 +19,8 @@ const box = gql`
     addOnProducts: [Product]
   }
 
-  type BoxDate {
-    delivered: String
-    count: Int
+  input BoxIdInput {
+    id: ID!
   }
 
   input BoxInput {
@@ -28,6 +28,7 @@ const box = gql`
     shopify_title: String!
     shopify_handle: String!
     shopify_variant_id: BigInt!
+    shopify_product_id: BigInt!
     shopify_price: Int!
   }
 
@@ -37,18 +38,38 @@ const box = gql`
     shopify_title: String
     shopify_handle: String
     shopify_variant_id: BigInt
+    shopify_product_id: BigInt!
     shopify_price: Int
   }
 
-  input BoxSearchInput {
+  input BoxDeliveredSearchInput {
     delivered: String!
     offset: Int!
     limit: Int!
   }
 
+  input BoxShopifyBoxSearchInput {
+    shopify_product_id: BigInt!
+    offset: Int!
+    limit: Int!
+  }
+
+  type BoxCountAndRows {
+    rows: [Box]
+    count: Int
+  }
+
   extend type Query {
     getAllBoxes: [Box]
-    getSelectedBoxes(input: BoxSearchInput): [Box]
+    getBoxDeliveredAndCount: [DeliveredAndCount]
+    getBoxesByDelivered(input: BoxDeliveredSearchInput): BoxCountAndRows
+    getBoxesByShopifyBox(input: BoxShopifyBoxSearchInput): BoxCountAndRows
+  }
+
+  extend type Mutation {
+    createBox(input: BoxInput!): Box
+    updateBox(input: BoxUpdateInput!): Box
+    deleteBox(input: BoxIdInput!): Int
   }
 `;
 

@@ -8,6 +8,7 @@ const product = gql`
     shopify_handle: String!
     shopify_variant_id: BigInt!
     shopify_price: Int!
+    shopify_product_gid: String!
     available: Boolean!
     createdAt: String!
     updatedAt: String!
@@ -19,7 +20,6 @@ const product = gql`
     title: String!
     available: Boolean
     shopify_id: BigInt!
-    shopify_gid: String!
     shopify_handle: String!
     shopify_variant_id: BigInt!
     shopify_price: Int!

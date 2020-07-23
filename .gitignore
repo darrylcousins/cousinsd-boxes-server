@@ -8,6 +8,10 @@ lerna-debug.log*
 
 *.sqlite
 
+# trials
+trial.js
+trial.sh
+
 # vim
 *.swp
 *.swo

@@ -9,6 +9,7 @@ const cache = new InMemoryCache({
 });
 
 const resolvers = {
+  /*
   Mutation: {
     // selected box for collapsible on box list
     setSelectedBox: (_, args, { cache, getCacheKey }) => {
@@ -17,6 +18,7 @@ const resolvers = {
       return null;
     },
   },
+  */
 };
 
 export const LocalHttpLink = new HttpLink({

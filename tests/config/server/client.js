@@ -14,13 +14,6 @@ const client = new ApolloClient({
   link,
   cache,
   onError: (error) => console.log('Error here', JSON.stringify(error, null, 2))
-  /*
-  onError: ({ networkError, graphQLErrors }) => {
-    console.log('graphQLError', JSON.stringify(graphQLErrors, null, 2))
-    console.log('networkError', JSON.stringify(networkError, null, 2))
-  }
-  */
 });
 
 module.exports = client;
-

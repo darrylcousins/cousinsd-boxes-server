@@ -22,7 +22,8 @@ module.exports = {
   "test": {
     "storage": "database.sqlite",
     "dialect": "sqlite",
-    "logging": false
+    //"logging": (...msg) => console.log(msg),
+    "logging": false,
   },
   "production": {
     "username": process.env.DB_USERNAME,

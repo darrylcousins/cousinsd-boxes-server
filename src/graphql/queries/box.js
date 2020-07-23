@@ -17,9 +17,15 @@ const BoxParts = `
   shopify_title
   shopify_handle
   shopify_variant_id
+  shopify_product_id
   shopify_price
   delivered
-  createdAt
+  products {
+    ${ProductParts}
+  }
+  addOnProducts {
+    ${ProductParts}
+  }
 `;
 
 // two fragments are identical but wouldn't work on a single definition
@@ -28,12 +34,47 @@ const BoxQueries = {
     query {
       getAllBoxes {
         ${BoxParts}
-        products {
-          ${ProductParts}
+      }
+    }
+  `,
+  getBoxesByShopifyBox: gql`
+    query getBoxesByShopifyBox($input: BoxShopifyBoxSearchInput!) {
+      # input: shopify_product_id, offset, limit
+      getBoxesByShopifyBox(input: $input) {
+        count
+        rows {
+          ${BoxParts}
         }
-        addOnProducts {
-          ${ProductParts}
+      }
+    }
+  `,
+  getBoxesByDelivered: gql`
+    query getBoxesByDelivered($input: BoxDeliveredSearchInput!) {
+      # input: delivered, offset, limit
+      getBoxesByDelivered(input: $input) {
+        count
+        rows {
+          ${BoxParts}
         }
+      }
+    }
+  `,
+  getBoxDeliveredAndCount: gql`
+    query {
+      getBoxDeliveredAndCount {
+        delivered
+        count
+      }
+    }
+  `,
+}
+
+const BoxMutations = {
+  createBox: gql`
+    mutation createBox($input: BoxInput!) {
+      # input: delivered, shopify_title, shopify_handle, shopify_variant_id, shopify_product_id, shopify_price
+      createBox(input: $input) {
+        ${BoxParts}
       }
     }
   `,
@@ -41,4 +82,5 @@ const BoxQueries = {
 
 module.exports = {
   BoxQueries,
+  BoxMutations,
 };

@@ -9,6 +9,9 @@ const resolvers = {
     async isAddOn(instance, args, context, info) {
       return await instance.BoxProduct.isAddOn;
     },
+    async shopify_product_gid(instance, args, context, info) {
+      return`gid://shopify/Product/${instance.shopify_product_id}`;
+    },
   },
   Query: {
   },

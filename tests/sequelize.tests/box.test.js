@@ -1,35 +1,11 @@
-const path = require('path');
 const { Op } = require("sequelize");
 const sequelize = require('sequelize');
+const { UTCDateOnly } = require('../../src/lib');
+const models = require('../../src/db/models');
 
-const env = process.env.NODE_ENV || 'test';
-
-const db = require('../../src/db/models');
-const { 
-  Box,
-  Product,
-  BoxProduct,
-  Order,
-  Subscriber,
-  Subscription,
-  SubscriptionType,
-  ShopifyBox,
-} = require('../../src/db/models');
-
-test('node env is test', () => expect(process.env.NODE_ENV).toBe('test'));
-
-test('get product', async () => {
-  const product = await Product.findOne(
-    {
-      include: {
-        model: Box,
-      },
-    }
-  );
-  //console.log(JSON.stringify(product, null, 2));
-  expect(product.Boxes[0].shopify_title).toBe('Small Box');
-  const box = await Box.findOne({ include: {
-    model: Product,
+test('sequelize: get box', async () => {
+  const box = await models.Box.findOne({ include: {
+    model: models.Product,
     attributes: ['shopify_title'],
     through: {
       attributes: ['isAddOn'],
@@ -39,130 +15,79 @@ test('get product', async () => {
   expect(box.shopify_title).toBe('Small Box');
 });
 
-test('get order', async () => {
-  const order = await Order.findOne({
-    attributes: ['shopify_title', 'shopify_order_id', 'shopify_line_item_id'],
-    include: [
-      {
-        model: ShopifyBox,
-        attributes: ['shopify_product_id'],
-      },
-      {
-        model: Box,
-        attributes: ['shopify_title', 'delivered'],
-        include: {
-          model: ShopifyBox,
-          attributes: ['shopify_product_id'],
-        },
-        include: {
-          model: Product,
-          attributes: ['shopify_title'],
-          through: {
-            attributes: ['isAddOn'],
-          }
-        },
-      },
-      {
-        model: Subscriber,
-        attributes: ['uid', 'shopify_customer_id'],
-        include: [
-          {
-            model: Subscription,
-            attributes: ['uid'],
-            include: {
-              model: SubscriptionType,
-              attributes: ['ShopifyBoxId'],
-              include: {
-                model: ShopifyBox,
-                attributes: ['shopify_product_id'],
-              },
-            },
-          },
-          {
-            model: Order,
-            attributes: ['shopify_title'],
-            include: {
-              model: ShopifyBox,
-              attributes: ['shopify_product_id'],
-            },
-          }
-        ]
-      },
-      {
-        model: Subscription,
-        attributes: ['uid'],
-        include: [
-          {
-            model: Subscriber,
-            attributes: ['uid'],
-          },
-          {
-            model: Order,
-            attributes: ['shopify_title', 'shopify_order_id'],
-          },
-          {
-            model: SubscriptionType,
-            attributes: ['duration', 'frequency'],
-            include: {
-              model: ShopifyBox,
-              attributes: ['shopify_product_id'],
-            },
-          },
-        ]
-      },
-    ]
+test('sequelize: get boxes as delivery date and count', async () => {
+  const result = await models.Box.findAll({
+    attributes: ['delivered', [sequelize.fn('count', sequelize.col('box.id')), 'count']],
   });
-  //console.log(JSON.stringify(order, null, 2));
-  //console.log(JSON.stringify(await Order.count(), null, 2));
-  expect(order.Box.shopify_title).toBe('Small Box');
-  expect(order.Box.Products.length).toBe(2);
-  expect(order.Subscriber.shopify_customer_id).toBe(4502212345999);
-  expect(order.Subscriber.Orders.length).toBe(1);
-  expect(order.Subscriber.Subscriptions.length).toBe(1);
-  expect(order.Subscription.Orders.length).toBe(1);
-  expect(order.Subscription.SubscriptionType.ShopifyBox.shopify_product_id).toBe(31792460398333);
+
+  const data = result[0]; // get first row
+
+  // XXX note that return date is UTC because it is stored that way!!!
+  expect(new Date(data.delivered).toString()).toBe(UTCDateOnly().toString());
+
+  // XXX note that count cannot be accessed with data.count!!!
+  expect(data.get('count')).toBe(1);
+
+  const dates = []
+  result.map((row) => {
+      dates.push(row.toJSON())
+  })
+  // XXX but now count can be accessed with data.count
+  expect(dates[0].count).toBe(1);
 });
 
-test('get order by delivery and count', async () => {
-  const dates = await Order.findOne({
-    attributes: ['shopify_title', [sequelize.fn('count', sequelize.col('order.id')), 'count']],
-    include: [
-      {
-        model: Box,
-        attributes: ['delivered'],
-        group: ['delivered'],
-        order: [['delivered', 'ASC']],
-        where: { 'delivered': { [Op.eq]: new Date() } },
-      },
-    ]
-  });
-});
+test('sequelize: find boxes by shopify box and count', async () => {
+  const offset = 0;
+  const limit = 10;
 
-test('get products by addon', async () => {
-  const box = await Box.findOne({
+  const data = await models.Box.findAndCountAll({
+    limit,
+    offset,
     include: {
-      model: Product,
-      attributes: ['shopify_title'],
-      through: {
-        attributes: ['isAddOn'],
-      }
-    },
-  });
-  expect(box.Products.length).toBe(2);
-  expect(box.Products.filter(product => product.BoxProduct.isAddOn).length).toBe(1);
-  expect(box.Products.filter(product => !product.BoxProduct.isAddOn).length).toBe(1);
-
-  const products = await Product.findAll({
-    include: [
-      {
-        model: Box,
-        attributes: ['shopify_title'],
-        through: {
-          attributes: ['isAddOn'],
-        }
+      model: models.ShopifyBox,
+      where: {
+        shopify_product_id: 31792460398333,
       },
-    ]
+      required: true,
+    }
   });
-  //console.log(JSON.stringify(products, null, 2));
-  expect(products.length).toBe(2)
+  expect(data.count).toBe(1);
+  expect(data.rows.length).toBe(1);
 });
+
+test('sequelize: find boxes by find and count all', async () => {
+  const data = await models.Box.findAndCountAll({
+    attributes: ['delivered', 'shopify_title'],
+  });
+  expect(data.count).toBe(1);
+  expect(data.rows.length).toBe(1);
+  expect(data.rows[0].shopify_title).toBe('Small Box');
+
+});
+
+test('sequelize: create box and add products', async () => {
+  const shopify_product_id = 31792460398555;
+  const [shopifyBox, created] = await models.ShopifyBox.findOrCreate({ where: { shopify_product_id } });
+  const input = {
+    shopify_title: "Large Box",
+    shopify_handle: "large-box",
+    shopify_variant_id: 31792460398555,
+    shopify_price: 3500,
+    delivered: new Date(),
+    ShopifyBoxId: shopifyBox.id,
+  };
+  // XXX return instance from create does not include associations
+  // Box.create(input, { include: ... }) does nothing to help
+  // instance.reload({ include: ... }) also does not help at all
+  await models.Box.create(input);
+  const box = await models.Box.findOne(
+    {
+      where: { shopify_handle: input.shopify_handle },
+      include: [models.Product, models.ShopifyBox]
+    }
+  );
+  expect(box.ShopifyBox.shopify_product_id).toBe(shopifyBox.shopify_product_id);
+
+  await box.destroy();
+});
+

@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { Order } = require('../../db/models');
+const models = require('../../db/models');
 const { dateToISOString } = require('../../lib');
 const sequelize = require('sequelize');
 
@@ -7,13 +7,13 @@ const resolvers = {
   Order: {
   },
   Query: {
-    async getOrders(root, { input }, { models }, info) {
+    async getOrders(root, { input }, context, info) {
       let { delivered, limit, offset, shopify_product_id, shopify_name } = input;
       if (!delivered) delivered = dateToISOString(new Date());
       const where = { delivered: {[Op.eq]: delivered} };
       if (shopify_product_id) where.shopify_product_id = shopify_product_id;
       if (shopify_name) where.shopify_name = shopify_name;
-      const orders = await Order.findAndCountAll({
+      const orders = await models.Order.findAndCountAll({
         where,
         limit,
         offset,
