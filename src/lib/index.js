@@ -157,9 +157,11 @@ const makeThrottledPromise = (observable, count) => {
 }
 
 const dateOnly = (date) => {
-  if (!date) {
+  if (date && typeof date === 'string') {
+    date = new Date(date);
+  } else if (!date) {
     date = new Date();
-  }
+  };
   var year = date.getFullYear();
   var month = date.getMonth();
   var day = date.getDate();
@@ -167,9 +169,11 @@ const dateOnly = (date) => {
 }
 
 const UTCDateOnly = (date) => {
-  if (!date) {
+  if (date && typeof date === 'string') {
+    date = new Date(date);
+  } else if (!date) {
     date = new Date();
-  }
+  };
   var year = date.getFullYear();
   var month = date.getMonth();
   var day = date.getDate();
@@ -181,7 +185,28 @@ const dateToISOString = (date) => {
   return date.toISOString().slice(0, 10); // try this out later
 }
 
+const toHandle = (title) => title.replace(/ /g, '-').toLowerCase();
+
+const numberedStringToHandle = (str) => {
+  // e.g. 'Baby Kale (2)' => 'baby-kale' 
+  str = str.trim();
+  const match = str.match(/\(\d+\)$/);
+  if (match) {
+    str = str.slice(0, match.index).trim();
+  }
+  return str.replace(/ /g, '-').toLowerCase();
+};
+
+/* deal with a list of strings say: 'Baby Kale (2)' => baby-kale' */
+const stringToArray = (arr) => arr.split(',')
+  .map((el) =>  numberedStringToHandle(el))
+  .filter((el) => el !== '')
+  .map((el) => toHandle(el));
+
 module.exports = {
+  toHandle,
+  numberedStringToHandle,
+  stringToArray,
   dateOnly,
   UTCDateOnly,
   mockResolveInfo,

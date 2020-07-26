@@ -1,6 +1,7 @@
 const { merge } = require('lodash');
 const BoxResolvers = require('./box');
 const ProductResolvers = require('./product');
+const BoxProductResolvers = require('./boxproduct');
 const OrderResolvers = require('./order');
 const SubscriptionResolvers = require('./subscription');
 const SubscriberResolvers = require('./subscriber');
@@ -17,6 +18,7 @@ const resolvers = merge(
   { BigInt },
   ProductResolvers,
   BoxResolvers,
+  BoxProductResolvers,
   OrderResolvers,
   SubscriptionResolvers,
   SubscriberResolvers,

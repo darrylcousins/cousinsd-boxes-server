@@ -14,11 +14,35 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: '0',
     },
+    BoxId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      field: "BoxId",
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+      references: {
+          model: "Boxes",
+          key: "id"
+      },
+      unique: 'compositeIndex',
+    },
+    ProductId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      field: "ProductId",
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+      references: {
+          model: "Products",
+          key: "id"
+      },
+      unique: "compositeIndex",
+    }
   }, {});
   BoxProduct.associate = function(models) {
     // associations can be defined here
-    BoxProduct.belongsTo(models.Box);
-    BoxProduct.belongsTo(models.Product);
+    //BoxProduct.hasMany(models.Box, { foreignKey: 'BoxId', targetKey: 'id', as: 'Box' });
+    //BoxProduct.hasMany(models.Product, { foreignKey: 'ProductId', targetKey: 'id', as: 'Product' });
   };
   return BoxProduct;
 };

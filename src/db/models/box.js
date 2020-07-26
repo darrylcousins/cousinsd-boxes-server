@@ -26,12 +26,22 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     //Box.belongsToMany(models.Subscription, { through: 'BoxSubscription', targetKey: 'shopify_product_id' });
     Box.hasMany(models.Order);
-    Box.hasMany(models.BoxProduct);
-    Box.belongsToMany(models.Product, { through: models.BoxProduct });
+    //Box.hasMany(models.BoxProduct);
+    //Box.belongsToMany(models.Product, { through: models.BoxProduct, unique: false });
+    Box.belongsToMany(models.Product, { through: 'BoxProduct', unique: false });
     Box.belongsTo(models.ShopifyBox);
   };
-  Box.prototype.addOnProducts = function(params) {
-    console.log(params);
+  Box.prototype.getProducts = function() {
+    return this.Products.filter(product => !product.BoxProduct.isAddOn);
+  };
+  Box.prototype.getAddOnProducts = function() {
+    return this.Products.filter(product => product.BoxProduct.isAddOn);
+  };
+  Box.prototype.getShopifyId = function() {
+    return this.ShopifyBox.shopify_product_id;
+  };
+  Box.prototype.getShopifyGid = function() {
+    return`gid://shopify/Product/${this.getShopifyId()}`;
   };
   return Box;
 };

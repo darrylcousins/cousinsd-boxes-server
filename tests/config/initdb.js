@@ -1,21 +1,24 @@
 const { dateOnly } = require('../../src/lib');
 const db = require('../../src/db/models');
 
-const tearDown = async () => {
-  await db.sequelize.drop();
-  await db.sequelize.close();
+const tearDown = () => {
+  return db.sequelize.drop()
+    .then(() => db.sequelize.close());
 };
 
-const setUp = async () => {
-  await db.sequelize.sync({ alter: true });
-  await db.sequelize.authenticate();
+const setUp = () => {
+  //await db.sequelize.drop();
+  return db.sequelize.sync({ alter: true, force: true })
+    .then(() => db.sequelize.authenticate());
+};
 
   // TODO need a better way to insert test data
 
-  const shopifyBox = db.ShopifyBox.build({
-    shopify_product_id: 31792460398333,
+const createBoxWithProducts = async () => {
+  const shopifyBox = await db.ShopifyBox.findOrCreate({
+    where: { id: 1 },
+    defaults: { shopify_product_id: 31792460398333 }
   });
-  await shopifyBox.save();
 
   const box = await db.Box.create({
     shopify_title: "Small Box",
@@ -23,9 +26,10 @@ const setUp = async () => {
     shopify_variant_id: 31792460398333,
     shopify_price: 2500,
     delivered: new Date(),
+    ShopifyBoxId: 1
   });
 
-  shopifyBox.addBox(box);
+  //box.setShopifyBox(shopifyBox);
 
   const productOne = await db.Product.create({
     shopify_title: "Green Beans",
@@ -46,6 +50,10 @@ const setUp = async () => {
   });
   await productTwo.addBox(box, { through: { isAddOn: false } });
   await productOne.addBox(box, { through: { isAddOn: true } });
+};
+
+const createSubscription = async () => {
+  const shopifyBox = await db.ShopifyBox.findOne({ where: { id: 1 }});
 
   const subscriptionType = db.SubscriptionType.build({
     duration: 0,
@@ -71,13 +79,18 @@ const setUp = async () => {
   subscription.setSubscriber(subscriber);
   await subscription.save();
 
-  const order = db.Order.build({
+};
+
+const createOrder = async () => {
+  const order = db.Order.create({
     shopify_title: "Small Box",
     shopify_order_id: 4502212345333,
     shopify_line_item_id: 31792460398333,
   });
   /* note the save everytime! otherwise we make a new order every time!!! */
   await order.save();
+
+  /*
   order.setBox(box)
   await order.save();
   order.setSubscription(subscription)
@@ -86,10 +99,13 @@ const setUp = async () => {
   await order.save();
   shopifyBox.addOrder(order);
   await order.save();
-
+  */
 };
 
 module.exports = {
   setUp,
   tearDown,
+  createBoxWithProducts,
+  createSubscription,
+  createOrder
 };

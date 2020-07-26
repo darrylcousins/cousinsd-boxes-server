@@ -8,7 +8,7 @@ const product = gql`
     shopify_handle: String!
     shopify_variant_id: BigInt!
     shopify_price: Int!
-    shopify_product_gid: String!
+    shopify_gid: String!
     available: Boolean!
     createdAt: String!
     updatedAt: String!
@@ -46,7 +46,7 @@ const product = gql`
 
   extend type Query {
     getProduct(input: ProductIdInput!): Product
-    getProducts: [Product]
+    getAllProducts: [Product]
   }
 
   extend type Mutation {

@@ -3,6 +3,7 @@ const { makeExecutableSchema } = require('graphql-tools');
 
 const product = require('./product');
 const box = require('./box');
+const boxproduct = require('./boxproduct');
 const order = require('./order');
 const subscription = require('./subscription');
 const subscriber = require('./subscriber');
@@ -35,6 +36,7 @@ const typeDefs = [
   root, 
   product, 
   box, 
+  boxproduct,
   order, 
   subscription, 
   subscriber,

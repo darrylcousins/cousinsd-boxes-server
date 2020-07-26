@@ -2,7 +2,7 @@ const { Op } = require("sequelize");
 const sequelize = require('sequelize');
 const models = require('../../src/db/models');
 
-test('get order', async () => {
+test('sequelize: get order', async () => {
   const order = await models.Order.findOne({
     attributes: ['shopify_title', 'shopify_order_id', 'shopify_line_item_id'],
     include: [
@@ -79,16 +79,17 @@ test('get order', async () => {
   //console.log(JSON.stringify(await models.Order.count(), null, 2));
   expect(order.Box.shopify_title).toBe('Small Box');
   expect(order.Box.Products.length).toBe(2);
-  expect(order.Subscriber.shopify_customer_id).toBe(4502212345999);
+  expect(parseInt(order.Subscriber.shopify_customer_id)).toBe(4502212345999);
   expect(order.Subscriber.Orders.length).toBe(1);
   expect(order.Subscriber.Subscriptions.length).toBe(1);
   expect(order.Subscription.Orders.length).toBe(1);
-  expect(order.Subscription.SubscriptionType.ShopifyBox.shopify_product_id).toBe(31792460398333);
+  expect(parseInt(order.Subscription.SubscriptionType.ShopifyBox.shopify_product_id)).toBe(31792460398333);
 });
 
-test('get order by delivery and count', async () => {
+test('sequelize: get order by delivery and count', async () => {
   const dates = await models.Order.findOne({
-    attributes: ['shopify_title', [sequelize.fn('count', sequelize.col('order.id')), 'count']],
+    attributes: ['Order.shopify_title', [sequelize.fn('count', sequelize.col('Order.id')), 'count']],
+    group: ['Order.shopify_title', 'Box.id'],
     include: [
       {
         model: models.Box,
@@ -96,6 +97,7 @@ test('get order by delivery and count', async () => {
         group: ['delivered'],
         order: [['delivered', 'ASC']],
         where: { 'delivered': { [Op.eq]: new Date() } },
+        duplicating: false,
       },
     ]
   });

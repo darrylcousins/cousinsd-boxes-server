@@ -15,12 +15,17 @@ const box = gql`
     shopify_price: Int!
     createdAt: String!
     updatedAt: String!
-    products: [Product]
-    addOnProducts: [Product]
+    products: [Product!]
+    addOnProducts: [Product!]
   }
 
   input BoxIdInput {
     id: ID!
+  }
+
+  input BoxDuplicateInput {
+    id: ID!
+    delivered: String!
   }
 
   input BoxInput {
@@ -38,7 +43,6 @@ const box = gql`
     shopify_title: String
     shopify_handle: String
     shopify_variant_id: BigInt
-    shopify_product_id: BigInt!
     shopify_price: Int
   }
 
@@ -46,6 +50,10 @@ const box = gql`
     delivered: String!
     offset: Int!
     limit: Int!
+  }
+
+  input BoxDeliveredInput {
+    delivered: String!
   }
 
   input BoxShopifyBoxSearchInput {
@@ -60,9 +68,12 @@ const box = gql`
   }
 
   extend type Query {
+    getBox(input: BoxIdInput!): Box!
+    getBoxProducts(input: BoxIdInput!): Box!
     getAllBoxes: [Box]
-    getBoxDeliveredAndCount: [DeliveredAndCount]
+    getBoxesDeliveredAndCount: [DeliveredAndCount]
     getBoxesByDelivered(input: BoxDeliveredSearchInput): BoxCountAndRows
+    getAllBoxesByDelivered(input: BoxDeliveredInput): [Box]
     getBoxesByShopifyBox(input: BoxShopifyBoxSearchInput): BoxCountAndRows
   }
 
@@ -70,6 +81,7 @@ const box = gql`
     createBox(input: BoxInput!): Box
     updateBox(input: BoxUpdateInput!): Box
     deleteBox(input: BoxIdInput!): Int
+    duplicateBox(input: BoxDuplicateInput!): Box
   }
 `;
 

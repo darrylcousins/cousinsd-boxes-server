@@ -5,11 +5,11 @@ const order = gql`
   type Order {
     id: ID!
     delivered: String!
-    shopify_name: String!
+    shopify_title: String!
     shopify_order_id: BigInt!
-    shopify_product_id: BigInt!
     shopify_line_item_id: BigInt!
-    shopify_customer_id: BigInt!
+    shopify_product_id: BigInt!
+    shopify_customer_id: BigInt
     createdAt: String!
     updatedAt: String!
   }
@@ -20,15 +20,21 @@ const order = gql`
   }
 
   input OrderSearchInput {
-    delivered: String!
-    offset: Int!
-    limit: Int!
+    delivered: String
+    offset: Int
+    limit: Int
     shopify_product_id: BigInt
-    shopify_name: String
+    shopify_title: String
+  }
+
+  type OrdersDeliveredAndCount {
+    count: Int!
+    delivered: String!
   }
 
   extend type Query {
-    getOrders: [Order]
+    getOrders(input: OrderSearchInput!): OrdersCountAndRows
+    getOrdersDeliveredAndCount: [OrdersDeliveredAndCount]
   }
 `;
 

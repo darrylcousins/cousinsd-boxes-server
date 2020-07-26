@@ -24,8 +24,16 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Product.associate = function(models) {
     // associations can be defined here
-    Product.belongsToMany(models.Box, { through: models.BoxProduct });
-    Product.hasMany(models.BoxProduct);
+    //Product.belongsToMany(models.Box, { through: models.BoxProduct, unique: false });
+    Product.belongsToMany(models.Box, { through: 'BoxProduct', unique: false });
+    //Product.hasMany(models.BoxProduct);
+  };
+  Product.prototype.getShopifyGid = function() {
+    return`gid://shopify/Product/${this.shopify_id}`;
+  };
+  Product.prototype.getIsAddOn = function() {
+    if (this.BoxProduct) return this.BoxProduct.isAddOn;
+    return null;
   };
   return Product;
 };

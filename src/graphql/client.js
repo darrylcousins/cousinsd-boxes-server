@@ -1,15 +1,13 @@
 import { gql, ApolloLink, ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
 import { RetryLink } from '@apollo/link-retry';
 import fetch from 'isomorphic-fetch';
-import { dateToISOString } from '../lib';
-import { GET_SELECTED_DATE } from '../components/boxes/queries';
+import { CacheQueries } from './queries';
 
 const cache = new InMemoryCache({
   dataIdFromObject: object => object.id,
 });
 
 const resolvers = {
-  /*
   Mutation: {
     // selected box for collapsible on box list
     setSelectedBox: (_, args, { cache, getCacheKey }) => {
@@ -18,7 +16,6 @@ const resolvers = {
       return null;
     },
   },
-  */
 };
 
 export const LocalHttpLink = new HttpLink({
@@ -57,12 +54,13 @@ export const Client = new ApolloClient({
 const initState = (date) => {
   if (!date) date = new Date();
   Client.writeQuery({
-    query: GET_SELECTED_DATE,
+    query: CacheQueries.getSelectedDate,
     data: {
-      selectedDate: dateToISOString(date),
+      selectedDate: date.toDateString(),
     }
   });
 }
+
 initState(new Date());
 
 export const resetStore = (date) => {

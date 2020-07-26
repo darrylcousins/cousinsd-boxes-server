@@ -4,13 +4,33 @@ const { Source } = require('graphql');
 const client = require('./../config/server/client');
 const { getQueryFields, filterFields, UTCDateOnly } = require('../../src/lib');
 const { BoxQueries, BoxMutations } = require('../../src/graphql/queries');
+const { BoxProductQueries, BoxProductMutations } = require('../../src/graphql/queries');
 const models = require('../../src/db/models');
+const { setUp, tearDown, createBoxWithProducts } = require('./../config/initdb');
+
+afterAll(() => {
+  return models.BoxProduct.destroy({where: {}})
+    .then(() => models.Product.destroy({where: {}}))
+    .then(() => models.Box.destroy({where: {}}));
+});
+
+beforeAll(() => {
+  return createBoxWithProducts();
+});
 
 test('graphql: sanity check', async () => {
   const result = await client.query({
       query: gql`query { hello }`,
     });
   expect(result.data.hello).toBe('world');
+});
+
+/*
+test('graphql: get box', async () => {
+  const query = BoxQueries.getBox;
+  const input = { id: 1 };
+  const variables = { input };
+  const { data }  = await client.query({ query, variables });
 });
 
 test('graphql: get all boxes', async () => {
@@ -81,9 +101,13 @@ test('graphql: get box delivered and count', async () => {
   expect(new Date(row.delivered).toString()).toBe(UTCDateOnly().toString());
 });
 
-test('graphql: create box', async () => {
-  const mutation = BoxMutations.createBox;
-  const input = {
+test('graphql: create box and add products', async () => {
+  const initialBox = await models.Box.findOne({
+    include: models.Product
+  });
+  
+  let mutation = BoxMutations.createBox;
+  let input = {
     shopify_product_id: 31792460398333,
     shopify_title: "Large Box",
     shopify_handle: "large-box",
@@ -91,14 +115,41 @@ test('graphql: create box', async () => {
     shopify_price: 3500,
     delivered: new Date(),
   };
-  const variables = { input };
-  const { data } = await client.mutate({ mutation, variables });
-  const box = data.createBox;
+  let variables = { input };
+  let { data } = await client.mutate({ mutation, variables });
+  let box = data.createBox;
 
   expect(box.shopify_product_id).toBe(input.shopify_product_id);
   expect(box.products.toString()).toBe([].toString());
 
-  await models.Box.findOne({ where: { id: box.id } })
-    .then(res => res.destroy());
+  const productIds = initialBox.getProducts()
+    .map(product => `gid://shopify/Product/${product.shopify_id}`);
+  const addOnIds = initialBox.getAddOnProducts()
+    .map(product => `gid://shopify/Product/${product.shopify_id}`);
 
+  mutation = BoxProductMutations.addBoxProducts;
+  input = {
+    boxId: box.id,
+    productGids: productIds,
+    isAddOn: false,
+  };
+  variables = { input };
+  await client.mutate({ mutation, variables });
+  mutation = BoxProductMutations.addBoxProducts;
+  input = {
+    boxId: box.id,
+    productGids: addOnIds,
+    isAddOn: true,
+  };
+  variables = { input };
+  await client.mutate({ mutation, variables });
+
+  query = BoxQueries.getBox;
+  input = { id: box.id };
+  variables = { input };
+  let result  = await client.query({ query, variables });
+  let gotBox = result.data.getBox;
+  expect(parseInt(gotBox.products[0].id)).toBe(initialBox.getProducts()[0].id);
+  expect(parseInt(gotBox.addOnProducts[0].id)).toBe(initialBox.getAddOnProducts()[0].id);
 });
+*/

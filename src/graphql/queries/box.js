@@ -1,16 +1,5 @@
 const { gql } = require('@apollo/client');
-//const { FRAGMENT_PRODUCT_ARRAY } = require('./product');
-
-const ProductParts = `
-  id
-  isAddOn
-  shopify_title
-  shopify_handle
-  shopify_id
-  shopify_variant_id
-  shopify_price
-  available
-`;
+const { ProductParts } = require('./product');
 
 const BoxParts = `
   id
@@ -18,8 +7,12 @@ const BoxParts = `
   shopify_handle
   shopify_variant_id
   shopify_product_id
+  shopify_product_gid
   shopify_price
   delivered
+`;
+
+const BoxProductParts = `
   products {
     ${ProductParts}
   }
@@ -30,10 +23,29 @@ const BoxParts = `
 
 // two fragments are identical but wouldn't work on a single definition
 const BoxQueries = {
+  getBox: gql`
+    query getBox($input: BoxIdInput!) {
+      # input: id (pk)
+      getBox(input: $input) {
+        ${BoxParts}
+        ${BoxProductParts}
+      }
+    }
+  `,
+  getBoxProducts: gql`
+    query getBoxProducts($input: BoxIdInput!) {
+      # input: id (pk)
+      getBoxProducts(input: $input) {
+        id
+        ${BoxProductParts}
+      }
+    }
+  `,
   getAllBoxes: gql`
     query {
       getAllBoxes {
         ${BoxParts}
+        ${BoxProductParts}
       }
     }
   `,
@@ -44,6 +56,7 @@ const BoxQueries = {
         count
         rows {
           ${BoxParts}
+          ${BoxProductParts}
         }
       }
     }
@@ -55,13 +68,22 @@ const BoxQueries = {
         count
         rows {
           ${BoxParts}
+          ${BoxProductParts}
         }
       }
     }
   `,
-  getBoxDeliveredAndCount: gql`
+  getAllBoxesByDelivered: gql`
+    query getAllBoxesByDelivered($input: BoxDeliveredInput!) {
+      # input: delivered
+      getAllBoxesByDelivered(input: $input) {
+        ${BoxParts}
+      }
+    }
+  `,
+  getBoxesDeliveredAndCount: gql`
     query {
-      getBoxDeliveredAndCount {
+      getBoxesDeliveredAndCount {
         delivered
         count
       }
@@ -75,12 +97,34 @@ const BoxMutations = {
       # input: delivered, shopify_title, shopify_handle, shopify_variant_id, shopify_product_id, shopify_price
       createBox(input: $input) {
         ${BoxParts}
+        ${BoxProductParts}
+      }
+    }
+  `,
+  updateBox: gql`
+    mutation updateBox($input: BoxUpdateInput!) {
+      updateBox(input: $input) {
+        id
+        shopify_title
+      }
+    }
+  `,
+  deleteBox: gql`
+    mutation deleteBox($input: BoxIdInput!) {
+      deleteBox(input: $input)
+    }
+  `,
+  duplicateBox: gql`
+    mutation duplicateBox($input: BoxDuplicateInput!) {
+      duplicateBox(input: $input) {
+        ${BoxParts}
       }
     }
   `,
 }
 
 module.exports = {
+  BoxParts,
   BoxQueries,
   BoxMutations,
 };

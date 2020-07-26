@@ -2,7 +2,7 @@ const { ApolloClient, HttpLink, InMemoryCache } = require('@apollo/client');
 const fetch = require('isomorphic-fetch');
 
 const cache = new InMemoryCache({
-  dataIdFromObject: object => object.id,
+  dataIdFromObject: object => `${object.__typename}:${object.id}`,
 });
 
 const link = new HttpLink({

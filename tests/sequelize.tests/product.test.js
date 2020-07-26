@@ -1,6 +1,15 @@
 const models = require('../../src/db/models');
+const { createBox } = require('./../config/initdb');
 
-test('get product', async () => {
+afterAll(() => {
+  return models.sequelize.sync({ force: true });
+});
+
+beforeAll(() => {
+  return createBox();
+});
+/*
+test('sequelize: get product', async () => {
   const product = await models.Product.findOne(
     {
       include: {
@@ -12,7 +21,7 @@ test('get product', async () => {
   expect(product.Boxes[0].shopify_title).toBe('Small Box');
 });
 
-test('get products by addon', async () => {
+test('sequelize: get products by addon', async () => {
   const box = await models.Box.findOne({
     include: {
       model: models.Product,
@@ -40,3 +49,4 @@ test('get products by addon', async () => {
   //console.log(JSON.stringify(products, null, 2));
   expect(products.length).toBe(2)
 });
+*/
