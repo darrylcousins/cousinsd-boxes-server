@@ -4,7 +4,7 @@ const models = require('../../db/models');
 
 const resolvers = {
   Mutation: {
-    async addBoxProducts (root, { input }, context, info) {
+    async createBoxProducts (root, { input }, context, info) {
       /* boxId, productGids, isAddOn */
       let { productGids, boxId, isAddOn } = input;
       const box = await models.Box.findByPk(boxId);

@@ -8,6 +8,7 @@ const subscriber = gql`
     createdAt: String!
     updatedAt: String!
     subscriptions: [Subscription]
+    orders: [Order]
   }
 
   input SubscriberInput {

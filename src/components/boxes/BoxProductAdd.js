@@ -26,7 +26,7 @@ export default function BoxProductAdd({ boxId, isAddOn, refetch }) {
 
   return (
     <Mutation
-      mutation={BoxProductMutations.addBoxProducts}
+      mutation={BoxProductMutations.createBoxProducts}
       fetchPolicy='no-cache'
     >
       {(handleAdd, { loading, error }) => {

@@ -1,7 +1,7 @@
 const { Op } = require("sequelize");
 const models = require('../../db/models');
 
-const productUpdate = (webhook) => {
+const productUpdate = async (webhook) => {
   const payload = webhook.payload;
   console.log('Received Update Product:', payload.title, payload.product_type);
 
@@ -23,15 +23,18 @@ const productUpdate = (webhook) => {
       .catch((error) => console.log('got error', error)
     );
   };
-  if (payload.product_type === 'Veggie Box') {
+  if (payload.product_type === 'Box Container') {
+    const [shopifyBox, created] = await models.ShopifyBox.findOrCreate({
+      where: { shopify_product_id: parseInt(payload.id) }
+    });
     const input = {
+      ShopifyBoxId: parseInt(shopifyBox.id),
       shopify_title: payload.title,
-      shopify_id: parseInt(payload.id),
       shopify_handle: payload.handle,
       shopify_variant_id: payload.variants[0].id,
     };
 
-    console.log(input);
+    console.log('Updating box container', input);
     models.Box.update(
       input,
       { where: { shopify_variant_id: payload.variants[0].id } }

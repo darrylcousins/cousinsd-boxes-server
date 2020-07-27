@@ -5,6 +5,9 @@ const resolvers = {
     async subscriptions(instance, args, context, info) {
       return await instance.getSubscriptions();
     },
+    async shopify_customer_id(instance, args, context, info) {
+      return await instance.Customer.shopify_customer_id();
+    },
   },
   Query: {
     async getSubscriber(root, { input }, context, info) {
@@ -23,16 +26,6 @@ const resolvers = {
   Mutation: {
     async createSubscriber (root, { input }, context, info) {
       return models.Subscriber.create(input);
-    },
-    async updateSubscriber (root, { input }, context, info) {
-      const { uid, ...props } = input;
-      await models.Subscriber.update(
-        props,
-        { where: { uid } }
-      );
-      return models.Subscriber.findOne({ 
-        where: { uid },
-      });
     },
     async deleteSubscriber (root, { input }, context, info) {
       /* id */

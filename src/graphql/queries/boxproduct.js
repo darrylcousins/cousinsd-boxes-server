@@ -4,9 +4,9 @@ const BoxProductQueries = {
 }
 
 const BoxProductMutations = {
-  addBoxProducts: gql`
-    mutation addBoxProducts($input: BoxProductGidsInput!) {
-      addBoxProducts(input: $input)
+  createBoxProducts: gql`
+    mutation createBoxProducts($input: BoxProductGidsInput!) {
+      createBoxProducts(input: $input)
     }
   `,
   removeBoxProduct: gql`

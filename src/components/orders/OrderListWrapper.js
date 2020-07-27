@@ -17,6 +17,7 @@ import { LocalHttpLink } from '../../graphql/client';
 import {
   dateOnly,
   dateToISOString,
+  UTCDateOnly,
   makePromise,
   makeThrottledPromise,
   getPdf,
@@ -84,7 +85,7 @@ export default function OrderListWrapper() {
   const [totalCount, setTotalCount] = useState(0);
   const [offset, setOffset] = useState(0);
   const [limit, setLimit] = useState(10);
-  const [input, setInput] = useState({ delivered: dateOnly(delivered) });
+  const [input, setInput] = useState({ delivered: UTCDateOnly(delivered) });
   /* end query stuff */
 
   /* filters */

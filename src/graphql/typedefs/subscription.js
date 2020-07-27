@@ -8,10 +8,11 @@ const subscription = gql`
     current_cart: JSON!
     last_cart: JSON!
     shopify_product_id: BigInt!
-    SubscriberId: Int!
+    shopify_customer_id: BigInt!
     subscriber: Subscriber
     createdAt: String!
     updatedAt: String!
+    orders: [Order]
   }
 
   input SubscriptionInput {
@@ -21,7 +22,7 @@ const subscription = gql`
     current_cart: JSON!
     last_cart: JSON!
     shopify_product_id: BigInt!
-    SubscriberId: Int!
+    shopify_customer_id: BigInt!
   }
 
   input SubscriptionUpdateInput {

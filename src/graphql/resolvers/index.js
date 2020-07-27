@@ -2,9 +2,11 @@ const { merge } = require('lodash');
 const BoxResolvers = require('./box');
 const ProductResolvers = require('./product');
 const BoxProductResolvers = require('./boxproduct');
+const CustomerResolvers = require('./customer');
 const OrderResolvers = require('./order');
 const SubscriptionResolvers = require('./subscription');
 const SubscriberResolvers = require('./subscriber');
+const SubscriptionTypeResolvers = require('./subscriptiontype');
 const BigInt = require('graphql-bigint');
 const GraphQLJSON = require('graphql-type-json');
 const { GraphQLJSONObject } = require('graphql-type-json');
@@ -19,9 +21,11 @@ const resolvers = merge(
   ProductResolvers,
   BoxResolvers,
   BoxProductResolvers,
+  CustomerResolvers,
   OrderResolvers,
   SubscriptionResolvers,
   SubscriberResolvers,
+  SubscriptionTypeResolvers,
 );
 
 

@@ -18,7 +18,7 @@ import { Query } from '@apollo/react-components';
 import { execute, useQuery } from '@apollo/client';
 
 import { LocalHttpLink } from '../../graphql/client';
-import { dateOnly } from '../../lib';
+import { UTCDateOnly } from '../../lib';
 import LoadingPageMarkup from '../common/LoadingPageMarkup';
 import ItemDatePicker from '../common/ItemDatePicker';
 import DateSelector from '../common/DateSelector';
@@ -47,7 +47,7 @@ export default function BoxList() {
 
   /* create query input variables */
   const [input, setInput] = useState({
-    delivered: dateOnly(delivered),
+    delivered: UTCDateOnly(delivered),
     limit: 10,
     offset: 0,
   });
@@ -107,6 +107,7 @@ export default function BoxList() {
       variables={ { input } }
     >
       {({ loading, error, data, refetch }) => {
+        if (error) console.log(JSON.stringify(error, null, 2));
         const isError = error && (
           <Banner status="critical">{error.message}</Banner>
         );
@@ -176,7 +177,7 @@ export default function BoxList() {
         }
 
         const handleDateChange = (date) => {
-          const input = { delivered: dateOnly(date), limit, offset };
+          const input = { delivered: UTCDateOnly(date), limit, offset };
           setDelivered(date);
           setInput(input);
           refetch({ input });

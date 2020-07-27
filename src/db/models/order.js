@@ -14,14 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   Order.associate = function(models) {
     // associations can be defined here
     Order.belongsTo(models.Box),
-    Order.belongsTo(models.Subscriber);
-    Order.belongsTo(models.ShopifyBox); // XXX if no subscription
-    Order.belongsTo(models.Subscription,
-      {
-        foreignKey: { allowNull: true },
-        onDelete: 'SET NULL',
-      }
-    );
+    Order.belongsTo(models.Customer);
   };
   return Order;
 };

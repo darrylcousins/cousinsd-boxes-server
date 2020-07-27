@@ -35,24 +35,20 @@ const product = gql`
     available: Boolean
   }
 
-  input ProductIdInput{
-    id: ID!
-  }
-
   input ProductAvailableInput {
     id: ID!
     available: Boolean!
   }
 
   extend type Query {
-    getProduct(input: ProductIdInput!): Product
+    getProduct(input: IdInput!): Product
     getAllProducts: [Product]
   }
 
   extend type Mutation {
     createProduct(input: ProductInput!): Product
     updateProduct(input: ProductUpdateInput!): Product
-    deleteProduct(input: ProductIdInput!): Int
+    deleteProduct(input: IdInput!): Int
     toggleProductAvailable(input: ProductAvailableInput!): Product
   }
 `;

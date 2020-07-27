@@ -24,8 +24,7 @@ const BoxProductParts = `
 // two fragments are identical but wouldn't work on a single definition
 const BoxQueries = {
   getBox: gql`
-    query getBox($input: BoxIdInput!) {
-      # input: id (pk)
+    query getBox($input: IdInput!) {
       getBox(input: $input) {
         ${BoxParts}
         ${BoxProductParts}
@@ -33,8 +32,7 @@ const BoxQueries = {
     }
   `,
   getBoxProducts: gql`
-    query getBoxProducts($input: BoxIdInput!) {
-      # input: id (pk)
+    query getBoxProducts($input: IdInput!) {
       getBoxProducts(input: $input) {
         id
         ${BoxProductParts}
@@ -78,6 +76,7 @@ const BoxQueries = {
       # input: delivered
       getAllBoxesByDelivered(input: $input) {
         ${BoxParts}
+        ${BoxProductParts}
       }
     }
   `,
@@ -110,7 +109,7 @@ const BoxMutations = {
     }
   `,
   deleteBox: gql`
-    mutation deleteBox($input: BoxIdInput!) {
+    mutation deleteBox($input: IdInput!) {
       deleteBox(input: $input)
     }
   `,

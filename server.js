@@ -167,8 +167,8 @@ app.prepare().then(() => {
     productCreate(ctx.state.webhook);
   });
 
-  router.post('/webhooks/products/update', webhook, (ctx) => {
-    productUpdate(ctx.state.webhook);
+  router.post('/webhooks/products/update', webhook, async (ctx) => {
+    await productUpdate(ctx.state.webhook);
   });
 
   router.post('/webhooks/products/delete', webhook, (ctx) => {
@@ -176,8 +176,8 @@ app.prepare().then(() => {
   });
 
   // order webhooks
-  router.post('/webhooks/orders/create', webhook, (ctx) => {
-    orderCreate(ctx.state.webhook);
+  router.post('/webhooks/orders/create', webhook, async (ctx) => {
+    await orderCreate(ctx.state.webhook);
   });
 
   router.post('/webhooks/orders/updated', webhook, (ctx) => {

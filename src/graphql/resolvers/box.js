@@ -19,10 +19,12 @@ const getBoxShopifyBoxInclude = (where) => {
 };
 
 const getBoxProductInclude = (fields) => {
-  if (!field.products) return {};
+  if (!fields.products) return {};
+  const productFields = filterFields(fields.products).filter(el => el !== 'isAddOn')
+    .filter(el => el != 'shopify_gid');
   return {
     model: models.Product,
-    attributes: filterFields(fields.products).filter(el => el !== 'isAddOn'),
+    attributes: productFields,
     through: {
       attributes: ['isAddOn'],
     },
@@ -50,7 +52,7 @@ const resolvers = {
       const fields = parseFields(info);
       // where input can be almost anything
       const include = [getBoxShopifyBoxInclude()];
-      if (fields.product) include.push(getBoxProductInclude(fields));
+      if (fields.products) include.push(getBoxProductInclude(fields));
       const box = await models.Box.findOne({
         where: input,
         attributes: getBoxAttributes(fields),
@@ -61,22 +63,28 @@ const resolvers = {
     async getBoxProducts(root, { input }, context, info) {
       const fields = parseFields(info);
       // where input can be almost anything
+      console.log(fields);
+      console.log(fields.products);
       const include = [getBoxShopifyBoxInclude()];
 
       // without product fields it is pretty much useless
-      if (fields.product) include.push(getBoxProductInclude(fields));
+      if (fields.products) include.push(getBoxProductInclude(fields));
+      console.log('WTF', JSON.stringify(include, null, 2));
+
       const box = await models.Box.findOne({
         where: input,
         attributes: getBoxAttributes(fields),
         include,
         order: [['shopify_title', 'DESC']]
       });
+      console.log(input);
+      console.log(box.toJSON());
       return box;
     },
     async getAllBoxes(root, { input }, context, info) {
       const fields = parseFields(info);
       const include = [getBoxShopifyBoxInclude()];
-      if (fields.product) include.push(getBoxProductInclude(fields));
+      if (fields.products) include.push(getBoxProductInclude(fields));
       const boxes = await models.Box.findAll({
         attributes: getBoxAttributes(fields),
         include,
@@ -89,7 +97,7 @@ const resolvers = {
       let { delivered, limit, offset } = input;
       const fields = parseFields(info);
       const include = [getBoxShopifyBoxInclude()];
-      if (fields.product) include.push(getBoxProductInclude(fields));
+      if (fields.products) include.push(getBoxProductInclude(fields));
       const where = { delivered: {[Op.eq]: delivered} };
       const data = await models.Box.findAndCountAll({
         where,
@@ -109,7 +117,7 @@ const resolvers = {
       let { delivered } = input;
       const fields = parseFields(info);
       const include = [getBoxShopifyBoxInclude()];
-      if (fields.product) include.push(getBoxProductInclude(fields));
+      if (fields.products) include.push(getBoxProductInclude(fields));
       const where = { delivered: {[Op.eq]: delivered} };
       const data = await models.Box.findAll({
         where,
@@ -126,7 +134,7 @@ const resolvers = {
       let { shopify_product_id, limit, offset } = input;
       const fields = parseFields(info);
       const include = [getBoxShopifyBoxInclude()];
-      if (fields.product) include.push(getBoxProductInclude(fields));
+      if (fields.products) include.push(getBoxProductInclude(fields));
       const data = await models.Box.findAndCountAll({
         limit,
         offset,

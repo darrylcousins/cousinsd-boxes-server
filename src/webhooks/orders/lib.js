@@ -10,15 +10,6 @@ const LABELKEYS = [
 ];
 
 /* helpers */
-const toHandle = (title) => title.replace(' ', '-').toLowerCase();
-
-const listToArray = (arr) => {
-  return arr.split(',')
-    .map(el => el.trim())
-    .filter(el => el != '')
-    .map(el => toHandle(el));
-};
-
 const arrayAdd = (arr, value) => {
   if (!arr.includes(value)) arr.push(value);
   return arr;
@@ -53,7 +44,31 @@ const savePayload = (payload) => {
   });
 };
 
+const toHandle = (title) => title.replace(/ /g, '-').toLowerCase();
+
+const numberedStringToHandle = (str) => {
+  // e.g. 'Baby Kale (2)' => 'baby-kale' 
+  str = str.trim();
+  const match = str.match(/\(\d+\)$/);
+  if (match) {
+    str = str.slice(0, match.index).trim();
+  }
+  return str.replace(/ /g, '-').toLowerCase();
+};
+
+/* deal with a list of strings say: 'Baby Kale (2)' => baby-kale' */
+const listOfToArray = (arr) => arr.split(',')
+  .map((el) =>  numberedStringToHandle(el))
+  .filter((el) => el !== '')
+  .map((el) => toHandle(el));
+
 module.exports = {
-  LABELKEYS, toHandle, listToArray, arrayAdd, getTotalPrice, getQuantities
+  LABELKEYS,
+  toHandle,
+  numberedStringToHandle,
+  listOfToArray,
+  arrayAdd,
+  getTotalPrice,
+  getQuantities
 };
 

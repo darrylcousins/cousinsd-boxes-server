@@ -32,9 +32,11 @@ module.exports = (sequelize, DataTypes) => {
     Box.belongsTo(models.ShopifyBox);
   };
   Box.prototype.getProducts = function() {
+    if (!this.Products) return [];
     return this.Products.filter(product => !product.BoxProduct.isAddOn);
   };
   Box.prototype.getAddOnProducts = function() {
+    if (!this.Products) return [];
     return this.Products.filter(product => product.BoxProduct.isAddOn);
   };
   Box.prototype.getShopifyId = function() {

@@ -5,27 +5,62 @@ var Sequelize = require('sequelize');
 /**
  * Actions summary:
  *
+ * createTable "Customers", deps: []
  * createTable "Products", deps: []
  * createTable "ShopifyBoxes", deps: []
- * createTable "Subscribers", deps: []
  * createTable "Boxes", deps: [ShopifyBoxes]
  * createTable "BoxProducts", deps: [Boxes, Products]
  * createTable "SubscriptionTypes", deps: [ShopifyBoxes]
+ * createTable "Subscribers", deps: [Customers]
  * createTable "Subscriptions", deps: [Subscribers, SubscriptionTypes]
- * createTable "Orders", deps: [Boxes, Subscribers, ShopifyBoxes, Subscriptions]
- * createTable "BoxSubscriptionTypes", deps: [SubscriptionTypes, Boxes]
+ * createTable "Orders", deps: [Boxes, Customers, ShopifyBoxes, Subscriptions]
+ * createTable "BoxSubscriptionType", deps: [SubscriptionTypes, Boxes]
  *
  **/
 
 var info = {
     "revision": 1,
     "name": "boxes",
-    "created": "2020-07-25T01:44:11.657Z",
+    "created": "2020-07-27T06:32:56.913Z",
     "comment": ""
 };
 
 var migrationCommands = function(transaction) {
     return [{
+            fn: "createTable",
+            params: [
+                "Customers",
+                {
+                    "id": {
+                        "type": Sequelize.INTEGER,
+                        "field": "id",
+                        "autoIncrement": true,
+                        "primaryKey": true,
+                        "allowNull": false
+                    },
+                    "shopify_customer_id": {
+                        "type": Sequelize.BIGINT,
+                        "field": "shopify_customer_id",
+                        "unique": true,
+                        "allowNull": false
+                    },
+                    "createdAt": {
+                        "type": Sequelize.DATE,
+                        "field": "createdAt",
+                        "allowNull": false
+                    },
+                    "updatedAt": {
+                        "type": Sequelize.DATE,
+                        "field": "updatedAt",
+                        "allowNull": false
+                    }
+                },
+                {
+                    "transaction": transaction
+                }
+            ]
+        },
+        {
             fn: "createTable",
             params: [
                 "Products",
@@ -96,47 +131,6 @@ var migrationCommands = function(transaction) {
                         "field": "shopify_product_id",
                         "unique": true,
                         "allowNull": false
-                    },
-                    "createdAt": {
-                        "type": Sequelize.DATE,
-                        "field": "createdAt",
-                        "allowNull": false
-                    },
-                    "updatedAt": {
-                        "type": Sequelize.DATE,
-                        "field": "updatedAt",
-                        "allowNull": false
-                    }
-                },
-                {
-                    "transaction": transaction
-                }
-            ]
-        },
-        {
-            fn: "createTable",
-            params: [
-                "Subscribers",
-                {
-                    "id": {
-                        "type": Sequelize.INTEGER,
-                        "field": "id",
-                        "autoIncrement": true,
-                        "primaryKey": true,
-                        "allowNull": false
-                    },
-                    "shopify_customer_id": {
-                        "type": Sequelize.BIGINT,
-                        "field": "shopify_customer_id",
-                        "unique": true,
-                        "allowNull": false
-                    },
-                    "uid": {
-                        "type": Sequelize.UUID,
-                        "field": "uid",
-                        "unique": true,
-                        "allowNull": false,
-                        "defaultValue": Sequelize.UUIDV4
                     },
                     "createdAt": {
                         "type": Sequelize.DATE,
@@ -287,6 +281,14 @@ var migrationCommands = function(transaction) {
                         "primaryKey": true,
                         "allowNull": false
                     },
+                    "title": {
+                        "type": Sequelize.STRING,
+                        "field": "title"
+                    },
+                    "description": {
+                        "type": Sequelize.TEXT,
+                        "field": "description"
+                    },
                     "duration": {
                         "type": Sequelize.INTEGER,
                         "field": "duration"
@@ -294,6 +296,10 @@ var migrationCommands = function(transaction) {
                     "frequency": {
                         "type": Sequelize.INTEGER,
                         "field": "frequency"
+                    },
+                    "discount": {
+                        "type": Sequelize.INTEGER,
+                        "field": "discount"
                     },
                     "createdAt": {
                         "type": Sequelize.DATE,
@@ -312,6 +318,52 @@ var migrationCommands = function(transaction) {
                         "onDelete": "SET NULL",
                         "references": {
                             "model": "ShopifyBoxes",
+                            "key": "id"
+                        },
+                        "allowNull": true
+                    }
+                },
+                {
+                    "transaction": transaction
+                }
+            ]
+        },
+        {
+            fn: "createTable",
+            params: [
+                "Subscribers",
+                {
+                    "id": {
+                        "type": Sequelize.INTEGER,
+                        "field": "id",
+                        "autoIncrement": true,
+                        "primaryKey": true,
+                        "allowNull": false
+                    },
+                    "uid": {
+                        "type": Sequelize.UUID,
+                        "field": "uid",
+                        "unique": true,
+                        "allowNull": false,
+                        "defaultValue": Sequelize.UUIDV4
+                    },
+                    "createdAt": {
+                        "type": Sequelize.DATE,
+                        "field": "createdAt",
+                        "allowNull": false
+                    },
+                    "updatedAt": {
+                        "type": Sequelize.DATE,
+                        "field": "updatedAt",
+                        "allowNull": false
+                    },
+                    "CustomerId": {
+                        "type": Sequelize.INTEGER,
+                        "field": "CustomerId",
+                        "onUpdate": "CASCADE",
+                        "onDelete": "SET NULL",
+                        "references": {
+                            "model": "Customers",
                             "key": "id"
                         },
                         "allowNull": true
@@ -432,13 +484,13 @@ var migrationCommands = function(transaction) {
                         },
                         "allowNull": true
                     },
-                    "SubscriberId": {
+                    "CustomerId": {
                         "type": Sequelize.INTEGER,
-                        "field": "SubscriberId",
+                        "field": "CustomerId",
                         "onUpdate": "CASCADE",
                         "onDelete": "SET NULL",
                         "references": {
-                            "model": "Subscribers",
+                            "model": "Customers",
                             "key": "id"
                         },
                         "allowNull": true
@@ -474,7 +526,7 @@ var migrationCommands = function(transaction) {
         {
             fn: "createTable",
             params: [
-                "BoxSubscriptionTypes",
+                "BoxSubscriptionType",
                 {
                     "createdAt": {
                         "type": Sequelize.DATE,
@@ -531,6 +583,12 @@ var rollbackCommands = function(transaction) {
         },
         {
             fn: "dropTable",
+            params: ["Customers", {
+                transaction: transaction
+            }]
+        },
+        {
+            fn: "dropTable",
             params: ["Orders", {
                 transaction: transaction
             }]
@@ -567,7 +625,7 @@ var rollbackCommands = function(transaction) {
         },
         {
             fn: "dropTable",
-            params: ["BoxSubscriptionTypes", {
+            params: ["BoxSubscriptionType", {
                 transaction: transaction
             }]
         }

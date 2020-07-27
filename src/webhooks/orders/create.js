@@ -1,7 +1,7 @@
 const models = require('../../db/models');
-const { LABELKEYS, toHandle, listToArray, arrayAdd, getTotalPrice, getQuantities } = require('./lib');
+const { LABELKEYS, numberedStringToHandle, listOfToArray, getTotalPrice, getQuantities } = require('./lib');
 
-const orderCreate = (webhook) => {
+const orderCreate = async (webhook) => {
   const [delivery_date, p_in, p_add, p_dislikes, subscribed, addprod] = LABELKEYS;
 
   const payload = webhook.payload;
@@ -39,7 +39,7 @@ const orderCreate = (webhook) => {
 
       const tempProduct = {
         box_product_name: attrs[addprod],
-        handle: toHandle(item.title),
+        handle: numberedStringToHandle(item.title),
         shopify_variant_id: item.variant_id,
         shopify_product_id: item.product_id,
         price: parseInt(parseFloat(item.price) * 100),
@@ -54,7 +54,7 @@ const orderCreate = (webhook) => {
   });
 
   const shopify_order_id = payload.id;
-  const shopify_order_name = payload.name;
+  const shopify_title = payload.name;
   const shopify_customer_id = payload.customer.id;
   const total_price = parseInt(parseFloat(payload.total_price) * 100);
 
@@ -63,45 +63,80 @@ const orderCreate = (webhook) => {
     let boxItem = box_map.get(key);
     let productItems = produce_map.get(key);
 
-    Box.findOne(
-      { where: {
-        shopify_id: boxItem.shopify_product_id,
+    const box = await models.Box.findOne({
+      where: {
         shopify_variant_id: boxItem.shopify_variant_id,
         delivered: new Date(Date.parse(delivered)),
-      }}
-    )
-    .then(box => {
-      let addOnProducts = listToArray(boxItem.addons);
-      let addOnRemoveQty = addOnProducts.map(el => {
-        const idx = el.indexOf(' '); // should be safe because these are spaceless handles
-        if (idx > -1 ) return el.slice(0, idx);
-        return el;
-      });
-      const cart = {
-        box_id: box.id,
-        delivered,
-        including: listToArray(boxItem.including),
-        addons: addOnProducts,
-        dislikes: listToArray(boxItem.dislikes),
-        shopify_title: box_title,
-        shopify_id: boxItem.shopify_product_id,
-        subscription: boxItem.subscription,
-        total_price: getTotalPrice(productItems.concat([boxItem])),
-        quantities: getQuantities(productItems, addOnRemoveQty),
-        is_loaded: true,
-      };
-      const order_input = {
-        shopify_name: shopify_order_name,
-        shopify_order_id,
+      },
+      include: {
+        model: models.ShopifyBox,
+        attribute: ['shopify_product_id', 'id'],
+      }
+    });
+    let addOnProducts = listOfToArray(boxItem.addons);
+    console.log('addOns', addOnProducts);
+    const cart = {
+      box_id: box.id,
+      delivered,
+      including: listOfToArray(boxItem.including),
+      addons: addOnProducts,
+      dislikes: listOfToArray(boxItem.dislikes),
+      shopify_title: box_title,
+      shopify_id: boxItem.shopify_product_id,
+      subscription: boxItem.subscription,
+      total_price: getTotalPrice(productItems.concat([boxItem])),
+      quantities: getQuantities(productItems, addOnProducts),
+      is_loaded: true,
+    };
+    const order_input = {
+      shopify_title: shopify_title,
+      shopify_order_id,
+      shopify_line_item_id: boxItem.line_item_id,
+      BoxId: box.id,
+      ShopifyBoxId: box.ShopifyBox.id,
+      CustomerId: null, // TODO XXX
+      SubscriptionId: null, // TODO XXX
+    };
+    console.log(boxItem.subscription);
+    console.log('Inserting order with', order_input);
+    console.log('Cart: ', cart);
+    console.log(box.toJSON());
+
+    const [customer, customerCreated] = await models.Customer.findOrCreate({
+      where: {
         shopify_customer_id,
-        ShopId,
-        delivered,
-        shopify_product_id: boxItem.shopify_product_id,
-        shopify_line_item_id: boxItem.line_item_id,
-        is_subscription: boxItem.subscription !== null,
-      };
-      console.log('Inserting order with', order_input);
-      console.log('Cart: ', cart);
+      }
+    });
+
+    if (boxItem.subscription) {
+      const subscriptionType = await models.SubscriptionType.findOne({
+        where: {
+          ShopifyBoxId: box.ShopifyBoxId,
+          title: boxItem.subscription,
+        }
+      });
+      const [subscriber, subscriberCreated] = await models.Subscriber.findOrCreate({
+        where: {
+          CustomerId: customer.id,
+        },
+      });
+      const [subscription, subscriptionCreated] = await models.Subscription.findOrCreate({
+        where: {
+          SubscriberId: subscriber.id,
+          SubscriptionTypeId: subscriptionType.id,
+        },
+        defaults: {
+          current_cart: cart,
+          last_cart: cart,
+        },
+      });
+      console.log(subscriptionType.toJSON());
+      console.log(subscriber.toJSON());
+      console.log(subscription.toJSON());
+    };
+    console.log(customer.toJSON());
+    
+      /*
       Order.create(order_input)
         .then((value) => console.log('created order', value.id))
         .catch((error) => console.log('got error', error)
@@ -125,12 +160,10 @@ const orderCreate = (webhook) => {
             Subscription.findOrCreate({ where: subscription_input })
               .then(([instance, created]) => {
                 const subscription_update = {
-                  /*
                   id: instance.id,
                   uid: instance.uid,
                   shopify_product_id: instance.shopify_product_id,
                   SubscriberId: instance.SubscriberId,
-                  */
                   frequency: boxItem.subscription,
                   current_cart: cart,
                   last_cart: cart,
@@ -149,6 +182,7 @@ const orderCreate = (webhook) => {
     })
     .catch(err => console.log(err))
     .finally(res => console.log('Finished'));
+  */
   };
 }
 

@@ -46,7 +46,7 @@ const resolvers = {
           },
         ],
       });
-      console.log(JSON.stringify(orders, null, 2));
+      //console.log(JSON.stringify(orders, null, 2));
       return orders;
     },
     async getOrdersDeliveredAndCount(root, { input }, context, info){

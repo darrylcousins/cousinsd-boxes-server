@@ -22,7 +22,7 @@ const boxproduct = gql`
   }
 
   extend type Mutation {
-    addBoxProducts(input: BoxProductGidsInput!): Boolean
+    createBoxProducts(input: BoxProductGidsInput!): Boolean
     removeBoxProduct(input: BoxProductInput!): Boolean
   }
 `;

@@ -116,6 +116,35 @@
             },
             "indexes": []
         },
+        "Customers": {
+            "tableName": "Customers",
+            "schema": {
+                "id": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "shopify_customer_id": {
+                    "allowNull": false,
+                    "unique": true,
+                    "field": "shopify_customer_id",
+                    "seqType": "Sequelize.BIGINT"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
         "Orders": {
             "tableName": "Orders",
             "schema": {
@@ -159,15 +188,15 @@
                     "field": "BoxId",
                     "seqType": "Sequelize.INTEGER"
                 },
-                "SubscriberId": {
+                "CustomerId": {
                     "allowNull": true,
                     "references": {
-                        "model": "Subscribers",
+                        "model": "Customers",
                         "key": "id"
                     },
                     "onDelete": "SET NULL",
                     "onUpdate": "CASCADE",
-                    "field": "SubscriberId",
+                    "field": "CustomerId",
                     "seqType": "Sequelize.INTEGER"
                 },
                 "ShopifyBoxId": {
@@ -285,12 +314,6 @@
                     "field": "id",
                     "seqType": "Sequelize.INTEGER"
                 },
-                "shopify_customer_id": {
-                    "allowNull": false,
-                    "unique": true,
-                    "field": "shopify_customer_id",
-                    "seqType": "Sequelize.BIGINT"
-                },
                 "uid": {
                     "defaultValue": {
                         "internal": true,
@@ -310,6 +333,17 @@
                     "allowNull": false,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
+                },
+                "CustomerId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "Customers",
+                        "key": "id"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "field": "CustomerId",
+                    "seqType": "Sequelize.INTEGER"
                 }
             },
             "indexes": []
@@ -387,12 +421,24 @@
                     "field": "id",
                     "seqType": "Sequelize.INTEGER"
                 },
+                "title": {
+                    "field": "title",
+                    "seqType": "Sequelize.STRING"
+                },
+                "description": {
+                    "field": "description",
+                    "seqType": "Sequelize.TEXT"
+                },
                 "duration": {
                     "field": "duration",
                     "seqType": "Sequelize.INTEGER"
                 },
                 "frequency": {
                     "field": "frequency",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "discount": {
+                    "field": "discount",
                     "seqType": "Sequelize.INTEGER"
                 },
                 "createdAt": {
@@ -419,8 +465,8 @@
             },
             "indexes": []
         },
-        "BoxSubscriptionTypes": {
-            "tableName": "BoxSubscriptionTypes",
+        "BoxSubscriptionType": {
+            "tableName": "BoxSubscriptionType",
             "schema": {
                 "createdAt": {
                     "allowNull": false,

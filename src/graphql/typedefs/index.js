@@ -4,6 +4,7 @@ const { makeExecutableSchema } = require('graphql-tools');
 const product = require('./product');
 const box = require('./box');
 const boxproduct = require('./boxproduct');
+const customer = require('./customer');
 const order = require('./order');
 const subscription = require('./subscription');
 const subscriber = require('./subscriber');
@@ -30,6 +31,10 @@ const root = gql`
     count: Int!
   }
 
+  input IdInput {
+    id: ID!
+  }
+
 `;
 
 const typeDefs = [
@@ -37,6 +42,7 @@ const typeDefs = [
   product, 
   box, 
   boxproduct,
+  customer,
   order, 
   subscription, 
   subscriber,

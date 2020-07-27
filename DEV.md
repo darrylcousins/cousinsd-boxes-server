@@ -16,16 +16,22 @@ This works quite nicely, an example is in ``src/scripts/erd.js``.
 npm install --save-dev sequelize-erd
 ```
 
-## Model to json
+## Delete all tables
 
-This works quite nicely.
+```sql
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO public;
+COMMENT ON SCHEMA public IS 'standard public schema';
+```
 
-```javascript
-const db = require('../models');
+## Rebuild tables
 
-(async function(){
-  const Product = db['Product'];
-  const products = await Product.findAll();
-  console.log(products[0].toJSON());
-})();
+```bash
+node ./node_modules/sequelize-auto-migrations/bin/makemigration.js --name boxes
+npx seuelize-cli db:migrate
+npx sequelize-cli db:seed --seed shopify-boxes
+npx sequelize-cli db:seed --seed boxes
+npx sequelize-cli db:seed --seed products
 ```

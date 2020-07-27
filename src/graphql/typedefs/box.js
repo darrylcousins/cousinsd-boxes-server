@@ -19,10 +19,6 @@ const box = gql`
     addOnProducts: [Product!]
   }
 
-  input BoxIdInput {
-    id: ID!
-  }
-
   input BoxDuplicateInput {
     id: ID!
     delivered: String!
@@ -68,8 +64,8 @@ const box = gql`
   }
 
   extend type Query {
-    getBox(input: BoxIdInput!): Box!
-    getBoxProducts(input: BoxIdInput!): Box!
+    getBox(input: IdInput!): Box!
+    getBoxProducts(input: IdInput!): Box!
     getAllBoxes: [Box]
     getBoxesDeliveredAndCount: [DeliveredAndCount]
     getBoxesByDelivered(input: BoxDeliveredSearchInput): BoxCountAndRows
@@ -80,7 +76,7 @@ const box = gql`
   extend type Mutation {
     createBox(input: BoxInput!): Box
     updateBox(input: BoxUpdateInput!): Box
-    deleteBox(input: BoxIdInput!): Int
+    deleteBox(input: IdInput!): Int
     duplicateBox(input: BoxDuplicateInput!): Box
   }
 `;
