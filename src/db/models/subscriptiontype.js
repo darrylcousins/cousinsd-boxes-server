@@ -20,7 +20,6 @@ module.exports = (sequelize, DataTypes) => {
   SubscriptionType.associate = function(models) {
     // associations can be defined here
     SubscriptionType.hasMany(models.Subscription);
-    SubscriptionType.belongsToMany(models.Box, { through: 'BoxSubscriptionType' });
     SubscriptionType.belongsTo(models.ShopifyBox);
   };
   return SubscriptionType;

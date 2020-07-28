@@ -8,6 +8,7 @@ import BoxList from './../src/components/boxes/BoxList';
 //import SubscriberList from './../src/components/subscriptions/SubscriberList';
 //import SubscriptionDetail from './../src/components/subscriptions/SubscriptionDetail';
 import ProductList from './../src/components/products/ProductList';
+import SubscriptionTypeList from './../src/components/subscriptions/SubscriptionTypeList';
 
 /* tab stuff */
 const tabs = [
@@ -40,6 +41,12 @@ const tabs = [
     content: 'Subscribers',
     accessibilityLabel: 'Subscribers',
     panelID: 'subscribers',
+  },
+  { 
+    id: 'subscriptiontypes',
+    content: 'Subscription Types',
+    accessibilityLabel: 'Subscription Types',
+    panelID: 'subscriptiontypes',
   },
 ];
 /* end tab stuff */
@@ -86,6 +93,15 @@ function Subscriptions() {
     <>
       <TitleBar title='Subscriptions' />
       <Card><SubscriberList /></Card>
+    </>
+  );
+}
+
+function SubscriptionTypes() {
+  return (
+    <>
+      <TitleBar title='Subscription Types' />
+      <Card><SubscriptionTypeList /></Card>
     </>
   );
 }
@@ -143,6 +159,7 @@ function App(props) {
         <Route path="/orders" component={Orders} />
         <Route path="/boxes" component={Boxes} />
         <Route path="/products" component={Products} />
+        <Route path="/subscriptiontypes" component={SubscriptionTypes} />
         <Route component={NotFound}/>
       </Switch>
     </Tabs>

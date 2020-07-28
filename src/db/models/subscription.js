@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
     last_cart: {
       type: DataTypes.JSONB,
     },
+    startedAt: {
+      type: DataTypes.DATEONLY,
+      defaultValue: DataTypes.NOW,
+    },
   }, {});
   Subscription.associate = function(models) {
     // associations can be defined here

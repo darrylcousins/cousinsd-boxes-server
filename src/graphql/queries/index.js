@@ -21,6 +21,10 @@ const {
   ShopifyQueries,
   ShopifyMutations,
 } = require('./shopify');
+const {
+  SubscriptionTypeQueries,
+  SubscriptionTypeMutations,
+} = require('./subscriptiontype');
 const BuildOrderQueries = require('./build-order-queries');
 
 module.exports = {
@@ -34,6 +38,8 @@ module.exports = {
   OrderMutations,
   ShopifyQueries,
   ShopifyMutations,
+  SubscriptionTypeQueries,
+  SubscriptionTypeMutations,
   BuildOrderQueries,
   CacheQueries,
 };

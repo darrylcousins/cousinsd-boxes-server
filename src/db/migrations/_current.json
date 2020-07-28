@@ -10,25 +10,6 @@
                     "field": "id",
                     "seqType": "Sequelize.INTEGER"
                 },
-                "shopify_handle": {
-                    "unique": "compositeIndex",
-                    "field": "shopify_handle",
-                    "seqType": "Sequelize.STRING"
-                },
-                "shopify_title": {
-                    "unique": "compositeIndex",
-                    "field": "shopify_title",
-                    "seqType": "Sequelize.STRING"
-                },
-                "shopify_variant_id": {
-                    "unique": "compositeIndex",
-                    "field": "shopify_variant_id",
-                    "seqType": "Sequelize.BIGINT"
-                },
-                "shopify_price": {
-                    "field": "shopify_price",
-                    "seqType": "Sequelize.INTEGER"
-                },
                 "delivered": {
                     "defaultValue": {
                         "internal": true,
@@ -199,17 +180,6 @@
                     "field": "CustomerId",
                     "seqType": "Sequelize.INTEGER"
                 },
-                "ShopifyBoxId": {
-                    "allowNull": true,
-                    "references": {
-                        "model": "ShopifyBoxes",
-                        "key": "id"
-                    },
-                    "onDelete": "SET NULL",
-                    "onUpdate": "CASCADE",
-                    "field": "ShopifyBoxId",
-                    "seqType": "Sequelize.INTEGER"
-                },
                 "SubscriptionId": {
                     "allowNull": true,
                     "references": {
@@ -290,6 +260,25 @@
                     "unique": true,
                     "field": "shopify_product_id",
                     "seqType": "Sequelize.BIGINT"
+                },
+                "shopify_handle": {
+                    "unique": "compositeIndex",
+                    "field": "shopify_handle",
+                    "seqType": "Sequelize.STRING"
+                },
+                "shopify_title": {
+                    "unique": "compositeIndex",
+                    "field": "shopify_title",
+                    "seqType": "Sequelize.STRING"
+                },
+                "shopify_variant_id": {
+                    "unique": "compositeIndex",
+                    "field": "shopify_variant_id",
+                    "seqType": "Sequelize.BIGINT"
+                },
+                "shopify_price": {
+                    "field": "shopify_price",
+                    "seqType": "Sequelize.INTEGER"
                 },
                 "createdAt": {
                     "allowNull": false,
@@ -376,6 +365,14 @@
                     "field": "last_cart",
                     "seqType": "Sequelize.JSONB"
                 },
+                "startedAt": {
+                    "defaultValue": {
+                        "internal": true,
+                        "value": "Sequelize.NOW"
+                    },
+                    "field": "startedAt",
+                    "seqType": "Sequelize.DATEONLY"
+                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -460,44 +457,6 @@
                     "onDelete": "SET NULL",
                     "onUpdate": "CASCADE",
                     "field": "ShopifyBoxId",
-                    "seqType": "Sequelize.INTEGER"
-                }
-            },
-            "indexes": []
-        },
-        "BoxSubscriptionType": {
-            "tableName": "BoxSubscriptionType",
-            "schema": {
-                "createdAt": {
-                    "allowNull": false,
-                    "field": "createdAt",
-                    "seqType": "Sequelize.DATE"
-                },
-                "updatedAt": {
-                    "allowNull": false,
-                    "field": "updatedAt",
-                    "seqType": "Sequelize.DATE"
-                },
-                "SubscriptionTypeId": {
-                    "primaryKey": true,
-                    "references": {
-                        "model": "SubscriptionTypes",
-                        "key": "id"
-                    },
-                    "onDelete": "CASCADE",
-                    "onUpdate": "CASCADE",
-                    "field": "SubscriptionTypeId",
-                    "seqType": "Sequelize.INTEGER"
-                },
-                "BoxId": {
-                    "primaryKey": true,
-                    "references": {
-                        "model": "Boxes",
-                        "key": "id"
-                    },
-                    "onDelete": "CASCADE",
-                    "onUpdate": "CASCADE",
-                    "field": "BoxId",
                     "seqType": "Sequelize.INTEGER"
                 }
             },

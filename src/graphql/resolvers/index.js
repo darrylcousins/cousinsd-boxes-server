@@ -4,6 +4,7 @@ const ProductResolvers = require('./product');
 const BoxProductResolvers = require('./boxproduct');
 const CustomerResolvers = require('./customer');
 const OrderResolvers = require('./order');
+const ShopifyBoxResolvers = require('./shopifybox');
 const SubscriptionResolvers = require('./subscription');
 const SubscriberResolvers = require('./subscriber');
 const SubscriptionTypeResolvers = require('./subscriptiontype');
@@ -23,6 +24,7 @@ const resolvers = merge(
   BoxProductResolvers,
   CustomerResolvers,
   OrderResolvers,
+  ShopifyBoxResolvers,
   SubscriptionResolvers,
   SubscriberResolvers,
   SubscriptionTypeResolvers,

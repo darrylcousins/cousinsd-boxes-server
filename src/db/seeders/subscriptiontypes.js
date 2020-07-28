@@ -13,6 +13,16 @@
     "createdAt": "2020-07-04T11:52:59.777Z",
     "updatedAt": "2020-07-17T04:32:06.636Z"
   },
+  {
+    "title": "Fortnightly",
+    "description": "Your box delivered and invoiced fortnightly.",
+    "discount": 0,
+    "duration": 0,
+    "frequency": 14,
+    "ShopifyBoxId": 2,
+    "createdAt": "2020-07-04T11:52:59.777Z",
+    "updatedAt": "2020-07-17T04:32:06.636Z"
+  },
 ]
       , {});
     },

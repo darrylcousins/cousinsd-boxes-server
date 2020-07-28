@@ -9,6 +9,7 @@ const subscription = gql`
     last_cart: JSON!
     shopify_product_id: BigInt!
     shopify_customer_id: BigInt!
+    shopify_box_title: String!
     subscriber: Subscriber
     createdAt: String!
     updatedAt: String!
@@ -37,13 +38,13 @@ const subscription = gql`
     uid: UUID!
   }
 
-  input SubscriptionSearchInput {
-    SubscriberUUID: UUID!
+  input SubscriptionFilterInput {
+    SubscriberUUID: UUID
   }
 
   extend type Query {
     getSubscription(input: SubscriptionUUIDInput!): Subscription
-    getSubscriptions(input: SubscriptionSearchInput!): [Subscription]
+    getSubscriptions(input: SubscriptionFilterInput!): [Subscription]
   }
 
   extend type Mutation {

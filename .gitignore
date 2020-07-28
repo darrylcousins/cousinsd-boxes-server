@@ -10,6 +10,7 @@ lerna-debug.log*
 
 # trials
 trial.js
+trial.mjs
 trial.sh
 
 # vim

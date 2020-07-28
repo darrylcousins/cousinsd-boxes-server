@@ -9,8 +9,9 @@ const subscription_type = gql`
     duration: Int!
     frequency: Int!
     shopify_product_id: BigInt!
+    shopify_box_title: String!
     subscriptions: [Subscription]
-    boxes: [Box]
+    ShopifyBox: ShopifyBox
   }
 
   input SubscriptionTypeInput {
@@ -23,11 +24,10 @@ const subscription_type = gql`
   }
 
   input SubscriptionTypeFilterInput {
-    shopify_product_id: BigInt!
+    shopify_product_id: BigInt
   }
 
   extend type Query {
-    getAllSubscriptionTypes: [SubscriptionType]
     getSubscriptionTypes(input: SubscriptionTypeFilterInput!): [SubscriptionType]
   }
 

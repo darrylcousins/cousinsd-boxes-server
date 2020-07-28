@@ -3,7 +3,16 @@ const models = require('../../db/models');
 const resolvers = {
   Subscription: {
     async subscriber(instance, args, context, info) {
-      return await instance.getSubscriber();
+      return await instance.Subscriber;
+    },
+    async orders(instance, args, context, info) {
+      return await instance.Orders;
+    },
+    async shopify_product_id(instance, args, context, info) {
+      return await instance.SubscriptionType.ShopifyBox.shopify_product_id;
+    },
+    async shopify_customer_id(instance, args, context, info) {
+      return await instance.Subscriber.Customer.shopify_customer_id;
     },
   },
   Query: {

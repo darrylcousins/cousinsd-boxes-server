@@ -1,21 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Box = sequelize.define('Box', {
-    shopify_handle: {
-      type: DataTypes.STRING,
-      unique: 'compositeIndex',
-    },
-    shopify_title: {
-      type: DataTypes.STRING,
-      unique: 'compositeIndex',
-    },
-    shopify_variant_id: {
-      type: DataTypes.BIGINT,
-      unique: 'compositeIndex',
-    },
-    shopify_price: {
-      type: DataTypes.INTEGER,
-    },
     delivered: {
       type: DataTypes.DATEONLY,
       defaultValue: DataTypes.NOW,
@@ -38,12 +23,6 @@ module.exports = (sequelize, DataTypes) => {
   Box.prototype.getAddOnProducts = function() {
     if (!this.Products) return [];
     return this.Products.filter(product => product.BoxProduct.isAddOn);
-  };
-  Box.prototype.getShopifyId = function() {
-    return this.ShopifyBox.shopify_product_id;
-  };
-  Box.prototype.getShopifyGid = function() {
-    return`gid://shopify/Product/${this.getShopifyId()}`;
   };
   return Box;
 };

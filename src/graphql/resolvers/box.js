@@ -6,15 +6,14 @@ const parseFields = require('graphql-parse-fields')
 
 const getBoxAttributes = (fields) => {
   return filterFields(fields)
-    .filter(el => el != 'shopify_product_id')
-    .filter(el => el != 'shopify_product_gid');
 };
 
-const getBoxShopifyBoxInclude = (where) => {
+const getBoxShopifyBoxInclude = (fields) => {
+  if (!fields.shopifyBox) return {};
   return {
     model: models.ShopifyBox,
-    attributes: ['shopify_product_id'],
-    where: where,
+    attributes: filterFields(fields.shopifyBox).filter(el => el !== 'shopify_product_gid'),
+    order: [['shopify_title', 'ASC']]
   };
 };
 
@@ -28,7 +27,7 @@ const getBoxProductInclude = (fields) => {
     through: {
       attributes: ['isAddOn'],
     },
-    order: [['shopify_title', 'DESC']]
+    order: [['shopify_title', 'ASC']]
   };
 };
 
@@ -40,11 +39,8 @@ const resolvers = {
     async addOnProducts(instance, args, context, info) {
       return instance.getAddOnProducts();
     },
-    async shopify_product_id(instance, args, context, info) {
-      return instance.getShopifyId();
-    },
-    async shopify_product_gid(instance, args, context, info) {
-      return instance.getShopifyGid();
+    async shopifyBox(instance, args, context, info) {
+      return instance.ShopifyBox;
     },
   },
   Query: {
@@ -63,32 +59,26 @@ const resolvers = {
     async getBoxProducts(root, { input }, context, info) {
       const fields = parseFields(info);
       // where input can be almost anything
-      console.log(fields);
-      console.log(fields.products);
-      const include = [getBoxShopifyBoxInclude()];
+      const include = [getBoxShopifyBoxInclude(fields)];
 
       // without product fields it is pretty much useless
       if (fields.products) include.push(getBoxProductInclude(fields));
-      console.log('WTF', JSON.stringify(include, null, 2));
 
       const box = await models.Box.findOne({
         where: input,
         attributes: getBoxAttributes(fields),
         include,
-        order: [['shopify_title', 'DESC']]
       });
-      console.log(input);
-      console.log(box.toJSON());
       return box;
     },
     async getAllBoxes(root, { input }, context, info) {
       const fields = parseFields(info);
-      const include = [getBoxShopifyBoxInclude()];
+      const include = [getBoxShopifyBoxInclude(fields)];
       if (fields.products) include.push(getBoxProductInclude(fields));
       const boxes = await models.Box.findAll({
-        attributes: getBoxAttributes(fields),
+        attributes: ['id', 'delivered'],
         include,
-        order: [['shopify_title', 'DESC']]
+        //order: [['ShopifyBox.shopify_title', 'ASC']]
       });
       return boxes;
     },

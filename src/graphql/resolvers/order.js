@@ -38,11 +38,11 @@ const resolvers = {
             model: models.Box,
             attributes: ['delivered'],
             where: { 'delivered': {[Op.eq]: delivered} },
-          },
-          {
-            model: models.ShopifyBox,
-            attributes: ['shopify_product_id'],
-            where: shopifyWhere,
+            include: {
+              model: models.ShopifyBox,
+              attributes: ['shopify_product_id'],
+              where: shopifyWhere,
+            },
           },
         ],
       });

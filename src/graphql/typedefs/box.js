@@ -7,16 +7,11 @@ const box = gql`
   type Box {
     id: ID!
     delivered: String!
-    shopify_title: String!
-    shopify_handle: String!
-    shopify_variant_id: BigInt!
-    shopify_product_id: BigInt!
-    shopify_product_gid: String!
-    shopify_price: Int!
-    createdAt: String!
-    updatedAt: String!
     products: [Product!]
     addOnProducts: [Product!]
+    shopifyBox: ShopifyBox!
+    createdAt: String!
+    updatedAt: String!
   }
 
   input BoxDuplicateInput {
@@ -26,20 +21,11 @@ const box = gql`
 
   input BoxInput {
     delivered: String
-    shopify_title: String!
-    shopify_handle: String!
-    shopify_variant_id: BigInt!
-    shopify_product_id: BigInt!
-    shopify_price: Int!
   }
 
   input BoxUpdateInput {
     id: ID!
     delivered: String
-    shopify_title: String
-    shopify_handle: String
-    shopify_variant_id: BigInt
-    shopify_price: Int
   }
 
   input BoxDeliveredSearchInput {
@@ -82,4 +68,3 @@ const box = gql`
 `;
 
 module.exports = box;
-

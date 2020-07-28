@@ -8,12 +8,18 @@ const getSubscriptionTypeIncludes = (where) => {
   return [
     {
       model: models.ShopifyBox,
-      attributes: ['shopify_product_id'],
-      where: { where }
+      attributes: ['shopify_product_id', 'shopify_product_title'],
+      where: where,
     },
     {
       model: models.Subscription,
-      attributes: ['shopify_customer_id'],
+      include: {
+        model: models.Subscriber,
+        include: {
+          model: models.Customer,
+          attributes: ['shopify_customer_id'],
+        }
+      }
     },
   ]
 };
@@ -23,23 +29,19 @@ const resolvers = {
     async shopify_product_id(instance, args, context, info) {
       return await instance.ShopifyBox.shopify_product_id;
     },
+    async shopify_box_title(instance, args, context, info) {
+      return await instance.ShopifyBox.shopify_title;
+    },
   },
   Query: {
-    async getAllSubscriptionTypes(root, { input }, context, info) {
-      const fields = parseFields(info);
-      const types = await models.SubscriptionType.findAll({
-        attributes: filterFields(fields).filter(el => el != 'shopify_product_id'),
-        include: getSubscriptionTypeIncludes(),
-      });
-      return types;
-    },
     async getSubscriptionTypes(root, { input }, context, info) {
       /* shopify_product_id */
       const { shopify_product_id } = input;
       const fields = parseFields(info);
+      const where = shopify_product_id ? { shopify_product_id } : null;
       const types = await models.SubscriptionType.findAll({
         attributes: filterFields(fields).filter(el => el != 'shopify_product_id'),
-        include: getSubscriptionTypeIncludes(),
+        include: getSubscriptionTypeIncludes(where),
       });
       return types;
     },

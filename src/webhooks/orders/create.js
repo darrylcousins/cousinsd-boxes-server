@@ -97,10 +97,10 @@ const orderCreate = async (webhook) => {
       CustomerId: null, // TODO XXX
       SubscriptionId: null, // TODO XXX
     };
-    console.log(boxItem.subscription);
+    console.log('Subscription', boxItem.subscription);
     console.log('Inserting order with', order_input);
     console.log('Cart: ', cart);
-    console.log(box.toJSON());
+    console.log('The box', box.toJSON());
 
     const [customer, customerCreated] = await models.Customer.findOrCreate({
       where: {
@@ -130,59 +130,16 @@ const orderCreate = async (webhook) => {
           last_cart: cart,
         },
       });
-      console.log(subscriptionType.toJSON());
-      console.log(subscriber.toJSON());
-      console.log(subscription.toJSON());
+      console.log('Sub Type', subscriptionType.toJSON());
+      console.log('Subscriber', subscriber.toJSON());
+      console.log('Subscription', subscription.toJSON());
     };
     console.log(customer.toJSON());
+
+    const order = await models.Order.create(order_input);
+
+    console.log('The order', order);
     
-      /*
-      Order.create(order_input)
-        .then((value) => console.log('created order', value.id))
-        .catch((error) => console.log('got error', error)
-      );
-      console.log('Subscribed', boxItem.subscription);
-      if (boxItem.subscription !== null) {
-        const subscriber_input = {
-          ShopId,
-          shopify_customer_id,
-        };
-        console.log('Inserting subscriber with', subscriber_input);
-        const subscriber = Subscriber.findOrCreate({ where: subscriber_input })
-          .then(([instance, created]) => {
-            console.log('created subscriber', instance.id, created);
-            const subscription_input = {
-              shopify_product_id: boxItem.shopify_product_id,
-              SubscriberId: instance.id,
-            };
-            console.log('Inserting subscription with', subscription_input);
-            // doing this allows for change to happen to cart and subscription
-            Subscription.findOrCreate({ where: subscription_input })
-              .then(([instance, created]) => {
-                const subscription_update = {
-                  id: instance.id,
-                  uid: instance.uid,
-                  shopify_product_id: instance.shopify_product_id,
-                  SubscriberId: instance.SubscriberId,
-                  frequency: boxItem.subscription,
-                  current_cart: cart,
-                  last_cart: cart,
-                };
-                Subscription.update(subscription_update, { where: { uid: instance.uid }})
-                 .then(([instance, updated]) => console.log('updated subscription', instance.id))
-                 .catch(err => console.log('error updating subscription', err));
-                console.log('created subscription', instance.id);
-              })
-              .catch((error) => console.log('error creating subscription', error)
-            );
-          })
-          .catch((error) => console.log('error creating subscriber', error)
-        );
-      };
-    })
-    .catch(err => console.log(err))
-    .finally(res => console.log('Finished'));
-  */
   };
 }
 
