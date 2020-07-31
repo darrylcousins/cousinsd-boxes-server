@@ -20,12 +20,22 @@ const box = gql`
   }
 
   input BoxInput {
-    delivered: String
+    delivered: String!
+    shopify_product_id: BigInt!
+    shopify_title: String!
+    shopify_handle: String!
+    shopify_variant_id: BigInt!
+    shopify_price: Int!
   }
 
   input BoxUpdateInput {
     id: ID!
     delivered: String
+    shopify_product_id: BigInt
+    shopify_title: String
+    shopify_handle: String
+    shopify_variant_id: BigInt
+    shopify_price: Int
   }
 
   input BoxDeliveredSearchInput {

@@ -3,13 +3,15 @@ const { ProductParts } = require('./product');
 
 const BoxParts = `
   id
-  shopify_title
-  shopify_handle
-  shopify_variant_id
-  shopify_product_id
-  shopify_product_gid
-  shopify_price
   delivered
+  shopifyBox {
+    shopify_title
+    shopify_handle
+    shopify_variant_id
+    shopify_product_id
+    shopify_product_gid
+    shopify_price
+  }
 `;
 
 const BoxProductParts = `

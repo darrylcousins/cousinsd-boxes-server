@@ -36,6 +36,7 @@ const tabs = [
     accessibilityLabel: 'Produce',
     panelID: 'products',
   },
+  /*
   { 
     id: 'subscribers',
     content: 'Subscribers',
@@ -48,27 +49,9 @@ const tabs = [
     accessibilityLabel: 'Subscription Types',
     panelID: 'subscriptiontypes',
   },
+  */
 ];
 /* end tab stuff */
-
-function Index() {
-  return (
-    <>
-      <TitleBar title='Veggies Boxes' />
-      <Card>
-        <EmptyState
-          heading="Manage veggie boxes on store"
-          action={{content: 'View boxes'}}
-          secondaryAction={{content: 'View orders'}}
-          fullWidth={true}
-          centeredLayout={false}
-        >
-          <p>Some content for home page</p>
-        </EmptyState>
-      </Card>
-    </>
-  );
-}
 
 function Orders() {
   return (
@@ -147,9 +130,35 @@ function App(props) {
     if (e === 0) {
       history.push(`/`);
     } else {
+      console.log('history pusging', tabs[e].id);
       history.push(`/${tabs[e].id}`);
     }
   };
+
+  const Index = () => {
+    return (
+      <>
+        <TitleBar title='Veggies Boxes' />
+        <Card>
+          <EmptyState
+            heading="Manage veggie boxes on store"
+            action={{
+              content: 'View boxes',
+              onAction: () => handleTabSelect(2),
+            }}
+            secondaryAction={{
+              content: 'View orders',
+              onAction: () => handleTabSelect(1),
+            }}
+            fullWidth={true}
+            centeredLayout={false}
+          >
+            <p>Some content for home page</p>
+          </EmptyState>
+        </Card>
+      </>
+    );
+  }
 
   return(
     <>

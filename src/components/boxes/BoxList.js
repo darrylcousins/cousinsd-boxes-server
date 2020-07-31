@@ -145,7 +145,7 @@ export default function BoxList() {
             <BoxShopTitle
               key={2}
               id={parseInt(box.id)}
-              title={box.shopify_title}
+              title={box.shopifyBox.shopify_title}
             />,
             <ItemDatePicker
               key={3}
