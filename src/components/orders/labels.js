@@ -68,7 +68,7 @@ const createLabelDoc = ({ data, delivered }) => {
             produce.push(node.product.handle);
           }
         }
-        if (lineItems[i].node.product.productType == 'Veggie Box') {
+        if (lineItems[i].node.product.productType == 'Container Box') {
           var customAttributes = lineItems[i].node.customAttributes.reduce(
             (acc, curr) => Object.assign(acc, { [`${curr.key}`]: curr.value }),
             {});

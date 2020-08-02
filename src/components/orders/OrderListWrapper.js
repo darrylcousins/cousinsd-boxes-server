@@ -85,7 +85,7 @@ export default function OrderListWrapper() {
   const [totalCount, setTotalCount] = useState(0);
   const [offset, setOffset] = useState(0);
   const [limit, setLimit] = useState(10);
-  const [input, setInput] = useState({ delivered: UTCDateOnly(delivered) });
+  const [input, setInput] = useState({ delivered: delivered });
   /* end query stuff */
 
   /* filters */
@@ -139,7 +139,7 @@ export default function OrderListWrapper() {
     const variables = { input: {
         offset,
         limit,
-        shopify_product_id: boxFilter ? boxFilter.shopify_product_id : null,
+        shopify_product_id: boxFilter ? boxFilter.shopifyBox.shopify_product_id : null,
         shopify_title: searchTerm.length ? searchTerm : null,
         ...input
       }
@@ -181,7 +181,7 @@ export default function OrderListWrapper() {
       .subscribe({
         next: (res) => {
           if (!res.errors) {
-            console.log('got this for orders delivered and count ', res);
+            //console.log('got this for orders delivered and count ', res);
             setDates(res.data.getOrdersDeliveredAndCount.map(el => ({ delivered: el.delivered, count: el.count })));
           } else {
             console.log('getOrdersDeliveredAndCount error:', JSON.stringify(res.errors, null, 2));
@@ -202,7 +202,7 @@ export default function OrderListWrapper() {
       .subscribe({
         next: (res) => {
           if (!res.errors) {
-            console.log('got this for boxes by delivered', res);
+            //console.log('got this for boxes by delivered', res);
             setBoxes(res.data.getAllBoxesByDelivered);
           } else {
             console.log('getAllBoxesByDelivered error', JSON.stringify(res.errors, null, 2));
@@ -274,11 +274,9 @@ export default function OrderListWrapper() {
       .subscribe({
         next: (res) => {
           const rows = res.data.getOrders.rows;
-          console.log('print labels rows', rows);
           const promises = collectPromises({ useChecked, rows, getQuery: BuildOrderQueries.getExportQuery });
           const response = Promise.all(promises)
             .then(data => {
-              console.log(data);
               setFeedbackText('Creating pdf file');
               return createLabelDoc({ data, delivered });
             })
@@ -323,7 +321,6 @@ export default function OrderListWrapper() {
           const promises = collectPromises({ useChecked, rows, getQuery: BuildOrderQueries.getShortQuery });
           const response = Promise.all(promises)
             .then(data => {
-              console.log(data);
               setFeedbackText('Creating pdf file');
               return createPickingDoc({ data, delivered });
             })
@@ -378,7 +375,7 @@ export default function OrderListWrapper() {
             .then(url => {
               var link = document.createElement('a');
               link.href = url;
-              link.download = `export-${dateToISOString(new Date(Date.parse(delivered)))}.csv`;
+              link.download = `export-${dateToISOString(new Date(delivered))}.csv`;
               link.click();
             })
             .catch(err => console.log(err))
@@ -521,7 +518,7 @@ export default function OrderListWrapper() {
           </ButtonGroup>
         </div>
       </div>
-      { query ? (
+      { query && !loading ? (
         <OrderList 
           input={input}
           checkbox={checkbox}

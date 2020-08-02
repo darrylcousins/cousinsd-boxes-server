@@ -7,11 +7,19 @@ const OrderQueries = {
         count
         rows {
           id
-          delivered
+          shopify_title
           shopify_order_id
           shopify_line_item_id
-          shopify_product_id
-          shopify_customer_id
+          box {
+            delivered
+            shopifyBox {
+              shopify_product_id
+              shopify_variant_id
+            }
+          }
+          customer {
+            shopify_customer_id
+          }
         }
       }
     }

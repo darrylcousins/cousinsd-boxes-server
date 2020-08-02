@@ -3,6 +3,8 @@ require('dotenv').config();
 const ENV = {
   SHOPIFY_API_KEY: process.env.SHOPIFY_API_KEY,
   SHOPIFY_API_SECRET_KEY: process.env.SHOPIFY_API_SECRET_KEY,
+  SHOPIFY_API_PASSWORD: process.env.SHOPIFY_API_PASSWORD,
+
   HOST: process.env.HOST,
   API_VERSION: process.env.API_VERSION,
   PORT: process.env.PORT,
@@ -10,7 +12,6 @@ const ENV = {
   SHOP_ID: process.env.SHOP_ID,
   SHOP_NAME: process.env.SHOP_NAME,
   SHOP_USERNAME: process.env.SHOP_USERNAME,
-  SHOP_PASSWORD: process.env.SHOP_PASSWORD,
 
   DB_HOSTNAME: process.env.DB_HOSTNAME,
   DB_PORT: process.env.DB_PORT,

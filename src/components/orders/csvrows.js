@@ -55,7 +55,7 @@ const createCsvRows = ({ data, delivered }) => {
 
       for (let i = 0; i < itemsLength; i++) {
         /* make list of paid for products to draw upon */
-        if (lineItems[i].node.product.productType === 'Veggie Box') {
+        if (lineItems[i].node.product.productType === 'Container Box') {
           var customAttributes = lineItems[i].node.customAttributes.reduce(
             (acc, curr) => Object.assign(acc, { [`${curr.key}`]: curr.value }),
             {});
@@ -89,7 +89,7 @@ const createCsvRows = ({ data, delivered }) => {
       };
       rows.push([
         //addressArray.join('\n'),
-        'StreamSide',
+        SHOP_NAME,
         boxName,
         deliveryDate,
         orderName,
@@ -104,7 +104,7 @@ const createCsvRows = ({ data, delivered }) => {
         removedItems.join('\n'),
         addonItems.join('\n'),
         deliveryNote,
-        'Farm note'
+        ''
       ]);
     }
   });

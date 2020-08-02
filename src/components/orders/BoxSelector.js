@@ -28,13 +28,13 @@ export default function BoxSelector({ handleBoxSelected, box, disabled, boxes })
         disabled={disabled}
         disclosure={!popoverActive ? 'down' : 'up'}
         >
-          { box ? box.shopify_title : 'Filter by box'}
+          { box ? box.shopifyBox.shopify_title : 'Filter by box'}
       </Button>
     )}>
       <ActionList
         items={ [{ content: 'All', onAction: () => setSelectedBoxChange(null) }].concat(boxes.map((box) => {
           return { 
-            content: box.shopify_title, 
+            content: box.shopifyBox.shopify_title, 
             onAction: () => setSelectedBoxChange(box),
           }
         }))}

@@ -23,21 +23,17 @@ const productUpdate = async (webhook) => {
       .catch((error) => console.log('got error', error)
     );
   };
-  if (payload.product_type === 'Box Container') {
-    const [shopifyBox, created] = await models.ShopifyBox.findOrCreate({
-      where: { shopify_product_id: parseInt(payload.id) }
-    });
+  if (payload.product_type === 'Container Box') {
     const input = {
-      ShopifyBoxId: parseInt(shopifyBox.id),
       shopify_title: payload.title,
       shopify_handle: payload.handle,
       shopify_variant_id: payload.variants[0].id,
     };
 
-    console.log('Updating box container', input);
-    models.Box.update(
+    console.log('Updating ShopifyBox', input);
+    models.ShopifyBox.update(
       input,
-      { where: { shopify_variant_id: payload.variants[0].id } }
+      { where: { shopify_product_id: parseInt(payload.id) } }
     ).then((value) => console.log('updated box', value))
       .catch((error) => console.log('got error', error)
     );

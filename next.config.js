@@ -21,9 +21,7 @@ module.exports = withPlugins([
         const env = { 
           API_KEY: JSON.stringify(process.env.SHOPIFY_API_KEY),
           API_VERSION: JSON.stringify(process.env.API_VERSION),
-          SHOP_ID: JSON.stringify(process.env.SHOP_ID),
-          SHOP_PASSWORD: JSON.stringify(process.env.SHOP_PASSWORD),
-          SHOP_USERNAME: JSON.stringify(process.env.SHOP_USERNAME),
+          API_PASSWORD: JSON.stringify(process.env.SHOPIFY_API_PASSWORD),
           SHOP_NAME: JSON.stringify(process.env.SHOP_NAME),
           HOST: JSON.stringify(process.env.HOST),
           LABELKEYS: JSON.stringify([

@@ -1,14 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import { useParams, BrowserRouter, Route, Link, Switch, useHistory } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-import { Card, Tabs, EmptyState } from '@shopify/polaris';
+import { Card, Tabs, EmptyState, Loading } from '@shopify/polaris';
 import { TitleBar } from '@shopify/app-bridge-react';
-import OrderListWrapper from './../src/components/orders/OrderListWrapper';
-import BoxList from './../src/components/boxes/BoxList';
-//import SubscriberList from './../src/components/subscriptions/SubscriberList';
-//import SubscriptionDetail from './../src/components/subscriptions/SubscriptionDetail';
-import ProductList from './../src/components/products/ProductList';
-import SubscriptionTypeList from './../src/components/subscriptions/SubscriptionTypeList';
+import loadable from "@loadable/component";
 
 /* tab stuff */
 const tabs = [
@@ -53,47 +48,81 @@ const tabs = [
 ];
 /* end tab stuff */
 
+
+const LoadableOrders = loadable(() => import('./../src/components/orders/OrderListWrapper'), {
+    fallback: <Loading />
+});
+
 function Orders() {
   return (
     <>
       <TitleBar title='Orders' />
-      <Card><OrderListWrapper /></Card>
+      <Card><LoadableOrders /></Card>
     </>
   );
 }
+
+const LoadableBoxes = loadable(() => import('./../src/components/boxes/BoxList'), {
+    fallback: <Loading />
+});
 
 function Boxes() {
   return (
     <>
       <TitleBar title='Boxes' />
-      <Card><BoxList /></Card>
+      <Card><LoadableBoxes /></Card>
     </>
   );
 }
+
+const LoadableSubscriptions = loadable(() => import('./../src/components/subscriptions/SubscriptionList'), {
+    fallback: <Loading />
+});
 
 function Subscriptions() {
   return (
     <>
       <TitleBar title='Subscriptions' />
-      <Card><SubscriberList /></Card>
+      <Card><LoadableSubscription /></Card>
     </>
   );
 }
+
+const LoadableSubscribers = loadable(() => import('./../src/components/subscriptions/SubscriberList'), {
+    fallback: <Loading />
+});
+
+function Subscribers() {
+  return (
+    <>
+      <TitleBar title='Subscribers' />
+      <Card><LoadableSubscribers /></Card>
+    </>
+  );
+}
+
+const LoadableSubscriptionTypes = loadable(() => import('./../src/components/subscriptions/SubscriptionTypeList'), {
+    fallback: <Loading />
+});
 
 function SubscriptionTypes() {
   return (
     <>
       <TitleBar title='Subscription Types' />
-      <Card><SubscriptionTypeList /></Card>
+      <Card><LoadableSubscriptionTypes /></Card>
     </>
   );
 }
+
+const LoadableProducts = loadable(() => import('./../src/components/products/ProductList'), {
+    fallback: <Loading />
+});
 
 function Products() {
   return (
     <>
       <TitleBar title='Products' />
-      <Card><ProductList /></Card>
+      <Card><LoadableProducts /></Card>
     </>
   );
 }
@@ -130,7 +159,6 @@ function App(props) {
     if (e === 0) {
       history.push(`/`);
     } else {
-      console.log('history pusging', tabs[e].id);
       history.push(`/${tabs[e].id}`);
     }
   };
@@ -138,10 +166,10 @@ function App(props) {
   const Index = () => {
     return (
       <>
-        <TitleBar title='Veggies Boxes' />
+        <TitleBar title='Boxes' />
         <Card>
           <EmptyState
-            heading="Manage veggie boxes on store"
+            heading="Manage boxes on store"
             action={{
               content: 'View boxes',
               onAction: () => handleTabSelect(2),

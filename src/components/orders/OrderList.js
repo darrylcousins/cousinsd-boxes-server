@@ -59,7 +59,6 @@ export default function OrderList({ query, input, checkbox, LineCheckbox }) {
 
         /* datatable stuff */
         let rows = Array();
-        //console.log(data);
 
         // XXX TODO handle no data
 
@@ -81,7 +80,7 @@ export default function OrderList({ query, input, checkbox, LineCheckbox }) {
             }
             for (let i = 0; i < lineItems.length; i++) {
               let node = lineItems[i].node;
-              if (node.product.productType == 'Veggie Box') {
+              if (node.product.productType == 'Container Box') {
                 var attrs = node.customAttributes.reduce(
                   (acc, curr) => Object.assign(acc, { [`${curr.key}`]: curr.value }),
                   {});

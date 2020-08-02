@@ -1,7 +1,7 @@
 const models = require('../../db/models');
-const { LABELKEYS, toHandle, listToArray, arrayAdd, getTotalPrice, getQuantities } = require('./lib');
+const { LABELKEYS, toHandle, listOfToArray, arrayAdd, getTotalPrice, getQuantities } = require('./lib');
 
-const orderUpdated = (webhook, ShopId) => {
+const orderUpdated = async (webhook, ShopId) => {
   const [delivery_date, p_in, p_add, p_dislikes, subscribed, addprod] = LABELKEYS;
 
   const payload = webhook.payload;
@@ -61,17 +61,23 @@ const orderUpdated = (webhook, ShopId) => {
   for (let key of box_map.keys()) {
     let [delivered, box_title] = key.split('::');
     let boxItem = box_map.get(key);
-    let productItems = produce_map.get(key);
+    let productItems = produce_map.has(key) ? produce_map.get(key) : [];
+
+    const shopifyBox = await models.ShopifyBox.findOne({
+      where: {
+        shopify_variant_id: boxItem.shopify_variant_id,
+        shopify_product_id: boxItem.shopify_product_id,
+      },
+    });
 
     models.Box.findOne(
       { where: {
-        shopify_id: boxItem.shopify_product_id,
-        shopify_variant_id: boxItem.shopify_variant_id,
-        delivered: new Date(Date.parse(delivered)),
+        ShopifyBoxId: shopifyBox.id,
+        delivered: new Date(delivered),
       }}
     )
     .then(box => {
-      let addOnProducts = listToArray(boxItem.addons);
+      let addOnProducts = listOfToArray(boxItem.addons);
       let addOnRemoveQty = addOnProducts.map(el => {
         const idx = el.indexOf(' '); // should be safe because these are spaceless handles
         if (idx > -1 ) return el.slice(0, idx);
@@ -79,9 +85,8 @@ const orderUpdated = (webhook, ShopId) => {
       });
       const order_input = {
         shopify_name: shopify_order_name,
-        shopify_customer_id,
         delivered,
-        shopify_product_id: boxItem.shopify_product_id,
+        BoxId: box.id,
         shopify_line_item_id: boxItem.line_item_id,
         is_subscription: boxItem.subscription !== null,
       };

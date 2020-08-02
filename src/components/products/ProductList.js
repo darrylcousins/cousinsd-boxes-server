@@ -35,7 +35,6 @@ export default function ProductList() {
         );
 
         /* datatable stuff */
-        console.log(data);
         const rows = (isLoading || !data) ? Array(3) : data.getAllProducts.map((product) => (
           [
             <Editable 

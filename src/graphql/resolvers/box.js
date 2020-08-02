@@ -72,6 +72,7 @@ const resolvers = {
         where: input,
         attributes: getBoxAttributes(fields),
         include,
+        order: [[models.Product, 'shopify_title']],
       });
       return box;
     },
@@ -106,6 +107,7 @@ const resolvers = {
         include,
       });
 
+      //console.log(JSON.stringify(data, null, 2));
       return data;
     },
     async getAllBoxesByDelivered(root, { input }, context, info) {
@@ -157,10 +159,10 @@ const resolvers = {
         order: [['delivered', 'ASC']],
       });
       // coerce from array of Boxes to simple json
-      const data = []
+      const data = [];
       dates.map((date) => {
-          data.push(date.toJSON())
-      })
+          data.push(date.toJSON());
+      });
       return data;
     },
   },

@@ -139,15 +139,15 @@
         },
         {
           "name": "Including",
-          "value": "Carrots, Cauliflower, Cavolonero Kale, Celery, Cucumber, Curly Kale, Leek"
+          "value": "Yams, Brocolli, Beans Green, Dill, Snow Peas"
         },
         {
           "name": "Add on items",
-          "value": "Beans Green, Baby Kale (2)"
+          "value": "Pumpkin Butternut, Parsnips (2)"
         },
         {
           "name": "Removed items",
-          "value": "Celeriac"
+          "value": "Seeded Sourdough Bread"
         },
         {
           "name": "Subscription",
@@ -198,17 +198,17 @@
     {
       "id": 5034635395130,
       "variant_id": 31792461840442,
-      "title": "Baby Kale",
+      "title": "Parsnips",
       "quantity": 2,
       "sku": "",
       "variant_title": "",
       "vendor": "Spring Collective",
       "fulfillment_service": "manual",
-      "product_id": 4502213296186,
+      "product_id": 4502212378682,
       "requires_shipping": true,
       "taxable": true,
       "gift_card": false,
-      "name": "Baby Kale",
+      "name": "Parsnips",
       "variant_inventory_management": "shopify",
       "properties": [
         {
@@ -248,7 +248,7 @@
       },
       "discount_allocations": [],
       "duties": [],
-      "admin_graphql_api_id": "gid://shopify/LineItem/5034635395130",
+      "admin_graphql_api_id": "gid://shopify/LineItem/4502212378682",
       "tax_lines": [],
       "origin_location": {
         "id": 1961204973626,
@@ -263,18 +263,18 @@
     },
     {
       "id": 5034635427898,
-      "variant_id": 31792461316154,
-      "title": "Beans Green",
+      "variant_id": 31792460464186,
+      "title": "Pumpkin Butternut",
       "quantity": 1,
       "sku": "",
       "variant_title": "",
       "vendor": "Spring Collective",
       "fulfillment_service": "manual",
-      "product_id": 4502212771898,
+      "product_id": 4502212411450,
       "requires_shipping": true,
       "taxable": true,
       "gift_card": false,
-      "name": "Beans Green",
+      "name": "Pumpkin Butternut",
       "variant_inventory_management": "shopify",
       "properties": [
         {
@@ -314,7 +314,7 @@
       },
       "discount_allocations": [],
       "duties": [],
-      "admin_graphql_api_id": "gid://shopify/LineItem/5034635427898",
+      "admin_graphql_api_id": "gid://shopify/LineItem/4502212411450",
       "tax_lines": [],
       "origin_location": {
         "id": 1961204973626,

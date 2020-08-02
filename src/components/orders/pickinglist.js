@@ -41,7 +41,7 @@ const createPickingDoc = ({ data, delivered }) => {
             console.log('produce quantity counter', lineItem.product.handle, lineItem.quantity);
           }
         }
-        if (lineItem.product.productType == 'Veggie Box') {
+        if (lineItem.product.productType == 'Container Box') {
           attrs = lineItem.customAttributes.reduce(
             (acc, curr) => Object.assign(acc, { [`${curr.key}`]: curr.value }),
             {});

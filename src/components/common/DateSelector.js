@@ -23,8 +23,6 @@ export default function DateSelector({ handleDateChange, disabled, dates }) {
   const [selectedDate, setSelectedDate] = useState(new Date(delivered));
 
   const setSelectedDateChange = (date) => {
-    console.log('selected date', date);
-    console.log('selected date toDateString', date.toDateString());
 
     setSelectedDate(date);
     const dateString = date.toDateString();

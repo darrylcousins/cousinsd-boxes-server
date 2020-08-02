@@ -5,8 +5,12 @@ const orderCreate = async (webhook) => {
   const [delivery_date, p_in, p_add, p_dislikes, subscribed, addprod] = LABELKEYS;
 
   const payload = webhook.payload;
-  //console.log('Received Create Order:', JSON.stringify(payload, null, 2));
+  console.log('Received Create Order:', JSON.stringify(payload, null, 2));
+
+  // a map of the container boxes found in line items
   let box_map = new Map();
+
+  // a map of the box produce found in line items
   let produce_map = new Map();
 
   // if line item quantity is 2 or more then will be picked up when printing labels
@@ -14,8 +18,10 @@ const orderCreate = async (webhook) => {
     var attrs = item.properties.reduce(
       (acc, curr) => Object.assign(acc, { [`${curr.name}`]: curr.value }),
       {});
+
     if (delivery_date in attrs && p_in in attrs && p_add in attrs) {
-      // we have a veggie box
+      // XXX we have a container box
+      //
       const subscription = subscribed in attrs ? attrs[subscribed] : null;
       const delivery = attrs[delivery_date];
 
@@ -61,12 +67,19 @@ const orderCreate = async (webhook) => {
   for (let key of box_map.keys()) {
     let [delivered, box_title] = key.split('::');
     let boxItem = box_map.get(key);
-    let productItems = produce_map.get(key);
+    let productItems = produce_map.has(key) ? produce_map.get(key) : [];
+
+    const shopifyBox = await models.ShopifyBox.findOne({
+      where: {
+        shopify_variant_id: boxItem.shopify_variant_id,
+        shopify_product_id: boxItem.shopify_product_id,
+      },
+    });
 
     const box = await models.Box.findOne({
       where: {
-        shopify_variant_id: boxItem.shopify_variant_id,
-        delivered: new Date(Date.parse(delivered)),
+        ShopifyBoxId: shopifyBox.id,
+        delivered: new Date(delivered),
       },
       include: {
         model: models.ShopifyBox,
@@ -74,7 +87,15 @@ const orderCreate = async (webhook) => {
       }
     });
     let addOnProducts = listOfToArray(boxItem.addons);
+
+    const [customer, customerCreated] = await models.Customer.findOrCreate({
+      where: {
+        shopify_customer_id,
+      }
+    });
+
     console.log('addOns', addOnProducts);
+    console.log('productItems', productItems);
     const cart = {
       box_id: box.id,
       delivered,
@@ -84,7 +105,7 @@ const orderCreate = async (webhook) => {
       shopify_title: box_title,
       shopify_id: boxItem.shopify_product_id,
       subscription: boxItem.subscription,
-      total_price: getTotalPrice(productItems.concat([boxItem])),
+      total_price: getTotalPrice(productItems.concat(boxItem.addons)),
       quantities: getQuantities(productItems, addOnProducts),
       is_loaded: true,
     };
@@ -93,20 +114,13 @@ const orderCreate = async (webhook) => {
       shopify_order_id,
       shopify_line_item_id: boxItem.line_item_id,
       BoxId: box.id,
-      ShopifyBoxId: box.ShopifyBox.id,
-      CustomerId: null, // TODO XXX
+      CustomerId: customer.id,
       SubscriptionId: null, // TODO XXX
     };
     console.log('Subscription', boxItem.subscription);
     console.log('Inserting order with', order_input);
     console.log('Cart: ', cart);
     console.log('The box', box.toJSON());
-
-    const [customer, customerCreated] = await models.Customer.findOrCreate({
-      where: {
-        shopify_customer_id,
-      }
-    });
 
     if (boxItem.subscription) {
       const subscriptionType = await models.SubscriptionType.findOne({

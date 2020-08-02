@@ -9,7 +9,9 @@ const order = gql`
     shopify_order_id: BigInt!
     shopify_line_item_id: BigInt!
     shopify_product_id: BigInt!
-    shopify_customer_id: BigInt
+    shopify_customer_id: BigInt!
+    customer: Customer!
+    box: Box!
     createdAt: String!
     updatedAt: String!
   }
