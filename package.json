@@ -76,7 +76,6 @@
     "sqlite3": "^5.0.0"
   },
   "comments": {
-    "ngrok": "^3.2.7",
-    "@cousinsd/shopify-boxes-client": "file:../shopify-boxes-client"
+    "ngrok": "^3.2.7"
   }
 }

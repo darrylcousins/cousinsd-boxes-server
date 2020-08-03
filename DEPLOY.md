@@ -7,3 +7,7 @@
 * Set up produce on development store (box-produce-products.csv)
 * Verify that webhooks added products to Heroku database
 
+How to get this in from the developement?
+```json
+"@cousinsd/shopify-boxes-client": "file:../shopify-boxes-client"
+```
