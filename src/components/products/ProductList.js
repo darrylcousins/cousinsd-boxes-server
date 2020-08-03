@@ -98,13 +98,12 @@ export default function ProductList() {
               <Layout>
                 <Layout.Section>
                   <EmptyState
-                    heading="Manage your veggie box produce"
+                    heading="Manage your box produce"
                     secondaryAction={{content: 'Learn more', url: 'http://cousinsd.net/'}}
                   >
                       <p style={{ textAlign: 'left' }}>
-                        Add products on your store, be sure to set<br />
-                        <strong>Product Type</strong> as <strong>&quot;Box Produce&quot;</strong>,<br />
-                        <strong>Vendor</strong> as <strong>&quot;Spring Collective&quot;</strong>
+                        Add products on your store, and they will show up here, be sure to set<br />
+                        <strong>Product Type</strong> as <strong>&quot;Box Produce&quot;</strong>
                       </p>
                   </EmptyState>
                 </Layout.Section>

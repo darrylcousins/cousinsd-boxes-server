@@ -28,7 +28,10 @@ COMMENT ON SCHEMA public IS 'standard public schema';
 
 ## Rebuild tables
 
+There's also a script `dbseed.sh` in `src/scripts`.
+
 ```bash
+rm src/db/migrations/*
 node ./node_modules/sequelize-auto-migrations/bin/makemigration.js --name boxes
 npx seuelize-cli db:migrate
 npx sequelize-cli db:seed --seed shopify-boxes
