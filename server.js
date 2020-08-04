@@ -26,14 +26,14 @@ const customerRedact = require('./src/webhooks/customers/redact');
 const customerDataRequest = require('./src/webhooks/customers/data-request');
 const authCallback = require('./src/webhooks/auth/callback');
 
+console.log('connecting as ', ENV.HOST, ' on ', ENV.PORT, '\n');
+
 const port = parseInt(ENV.PORT, 10) || 3000;
 const dev = ENV.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
 const ApiVer = ApiVersion.April20;
-
-console.log('connecting as ', ENV.HOST, ' on ', ENV.PORT, '\n');
 
 app.prepare().then(() => {
   const server = new Koa();

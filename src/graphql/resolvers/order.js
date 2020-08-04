@@ -83,7 +83,7 @@ const resolvers = {
           data.push(date.toJSON());
         };
       });
-      return data;
+      return data.filter(el => el !== null);
     },
   },
   Mutation: {
