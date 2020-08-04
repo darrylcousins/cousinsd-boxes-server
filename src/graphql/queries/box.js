@@ -105,7 +105,7 @@ const BoxMutations = {
   updateBox: gql`
     mutation updateBox($input: BoxUpdateInput!) {
       updateBox(input: $input) {
-        ${BoxParts}
+        id
       }
     }
   `,

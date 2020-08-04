@@ -87,8 +87,6 @@ const resolvers = {
         };
       });
       const res = data.filter(el => el !== null);
-      console.log('GOT THIS DATA', data);
-      console.log('AND THIS RESULT', res);
       return res;
     },
   },
