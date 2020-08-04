@@ -80,7 +80,10 @@ const resolvers = {
       const data = [];
       dates.map((date) => {
         if (date) {
-          data.push(date.toJSON());
+          const temp = date.toJSON();
+          if (temp.delivered) {
+            data.push(date.toJSON());
+          }
         };
       });
       const res = data.filter(el => el !== null);
