@@ -83,7 +83,10 @@ const resolvers = {
           data.push(date.toJSON());
         };
       });
-      return data.filter(el => el !== null);
+      const res = data.filter(el => el !== null);
+      console.log('GOT THIS DATA', data);
+      console.log('AND THIS RESULT', res);
+      return res;
     },
   },
   Mutation: {
