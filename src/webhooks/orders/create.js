@@ -5,7 +5,7 @@ const orderCreate = async (webhook) => {
   const [delivery_date, p_in, p_add, p_dislikes, subscribed, addprod] = LABELKEYS;
 
   const payload = webhook.payload;
-  console.log('Received Create Order:', JSON.stringify(payload, null, 2));
+  console.log('Received Create Order:');
 
   // a map of the container boxes found in line items
   let box_map = new Map();

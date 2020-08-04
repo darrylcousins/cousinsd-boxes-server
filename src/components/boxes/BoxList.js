@@ -9,6 +9,7 @@ import {
   Icon,
   Loading,
   Sheet,
+  TextStyle,
   Toast,
 } from '@shopify/polaris';
 import {
@@ -131,6 +132,17 @@ export default function BoxList() {
           setTotalCount(count);
           */
         };
+        /* Hold this back for now XXX TODO
+            <ItemDatePicker
+              key={3}
+              id={parseInt(box.id)}
+              refetch={refetch}
+              mutation={BoxMutations.updateBox}
+              date={new Date(box.delivered)}
+              fieldName='delivered'
+              variation='subdued'
+            />,
+            */
 
         const tableRows = (rows.length === 0) ? Array(0) : rows.map((box) => {
           return [
@@ -147,15 +159,10 @@ export default function BoxList() {
               id={parseInt(box.id)}
               title={box.shopifyBox.shopify_title}
             />,
-            <ItemDatePicker
-              key={3}
-              id={parseInt(box.id)}
-              refetch={refetch}
-              mutation={BoxMutations.updateBox}
-              date={new Date(box.delivered)}
-              fieldName='delivered'
-              variation='subdued'
-            />,
+            <TextStyle
+              variation='subdued'>
+                {new Date(box.delivered).toDateString()}
+            </TextStyle>,
             <BoxProductList
               key={4}
               id={parseInt(box.id)}

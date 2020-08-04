@@ -90,13 +90,15 @@ const orderUpdated = async (webhook, ShopId) => {
         shopify_line_item_id: boxItem.line_item_id,
         is_subscription: boxItem.subscription !== null,
       };
-      console.log('Updating order with', order_input);
+      console.log('Would be updating order shopify id:', shopify_order_id,'with', order_input);
+      /*
       models.Order.update(
         order_input,
         { where: { shopify_order_id: payload.id } }
       ).then((value) => console.log('updated order', value))
         .catch((error) => console.log('got error', error)
       );
+      */
     })
     .catch(err => console.log(err))
     .finally(res => console.log('Finished'));
