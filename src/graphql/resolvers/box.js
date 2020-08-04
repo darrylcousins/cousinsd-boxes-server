@@ -225,10 +225,17 @@ const resolvers = {
     },
     async updateBox (root, { input }, context, info) {
       const { id, ...props } = input;
-      return await models.Box.update(
+      console.log(JSON.stringify(input, null, 2));
+      const res = await models.Box.update(
         props,
         { where: { id } }
       );
+      console.log(res);
+      const box = await models.Box.findByPk(
+        id,
+      );
+      console.log(JSON.stringify(box, null, 2));
+      return box;
     },
     async deleteBox (root, { input }, context, info) {
       /* id */
