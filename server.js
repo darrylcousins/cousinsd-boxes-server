@@ -33,7 +33,7 @@ const handle = app.getRequestHandler();
 
 const ApiVer = ApiVersion.April20;
 
-console.log('connecting as ', ENV.HOST, '\n');
+console.log('connecting as ', ENV.HOST, ' on ', ENV.PORT, '\n');
 
 app.prepare().then(() => {
   const server = new Koa();
