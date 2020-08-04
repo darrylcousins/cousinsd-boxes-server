@@ -79,9 +79,11 @@ const resolvers = {
 
       const data = [];
       dates.map((date) => {
+        if (date) {
           data.push(date.toJSON());
+        };
       });
-      return data.map(el => el !== null);
+      return data;
     },
   },
   Mutation: {
