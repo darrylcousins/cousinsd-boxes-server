@@ -151,6 +151,8 @@ const resolvers = {
         include,
       });
 
+      console.log('got this date to filter on', moment().toDate());
+
       return data;
     },
     async getBoxesDeliveredAndCount(root, args, context, info){

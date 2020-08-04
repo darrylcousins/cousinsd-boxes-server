@@ -105,8 +105,7 @@ const BoxMutations = {
   updateBox: gql`
     mutation updateBox($input: BoxUpdateInput!) {
       updateBox(input: $input) {
-        id
-        shopify_title
+        ${BoxParts}
       }
     }
   `,

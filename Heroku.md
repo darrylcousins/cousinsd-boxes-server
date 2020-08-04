@@ -11,3 +11,9 @@ PGUSER=cousinsd PGPASSWORD=******** heroku pg:push shopify_app DATABASE_URL
 ```
 
 process.ENV variables are set up with heroku dashboard.
+
+If you need to talk directly to the database
+
+```bash
+heroku pg:psql
+```
