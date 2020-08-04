@@ -1,4 +1,5 @@
 const { Op } = require("sequelize");
+const moment = require('moment');
 const models = require('../../db/models');
 const { UTCDateOnly, dateToISOString, filterFields } = require('../../lib');
 const sequelize = require('sequelize');
@@ -143,7 +144,7 @@ const resolvers = {
       const data = await models.Box.findAndCountAll({
         limit,
         offset,
-        //where: { delivered: { [Op.gt]: new Date().toUTCString() } },
+        where: { delivered: { [Op.gt]: moment().toDate() } },
         order: [['delivered', 'ASC']],
         distinct: true, // stops the join count on products
         attributes: getBoxAttributes(fields.rows),
