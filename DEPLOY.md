@@ -20,6 +20,21 @@ Not possible without shopify approval. So i've installed instead on non-transfer
 PGUSER=cousinsd PGPASSWORD=******** heroku pg:push shopify_boxes DATABASE_URL
 ```
 
+# Download the store theme
+
+Requires themekit. Go to store apps, add private app. Select theme read/write
+permissions. Gather the secret authentication details.
+
+```bash
+mkdir theme; cd theme;
+theme get --list -p=[your-password] -s=[you-store.myshopify.com]
+```
+
+Then download the 'live' theme to local folder
+```bash
+theme get -p=[your-password] -s=[you-store.myshopify.com] -t=[your-theme-id]
+```
+
 # Build client component
 
 Make our branch, build, copy to theme, and deploy from there.

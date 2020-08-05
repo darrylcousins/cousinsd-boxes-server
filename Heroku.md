@@ -15,5 +15,5 @@ process.ENV variables are set up with heroku dashboard.
 If you need to talk directly to the database
 
 ```bash
-heroku pg:psql
+heroku pg:psql -a APP
 ```
