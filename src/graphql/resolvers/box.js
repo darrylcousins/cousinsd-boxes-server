@@ -174,6 +174,8 @@ const resolvers = {
       /* shopify_product_id, shopify_title, shopify_handle, shopify_price, shopify_variant_id, delivered */
       let { delivered, ...values } = input;
       console.log('got this date to add', delivered);
+      const deliveryDate = moment(delivered)
+      console.log('but using the moment', deliveryDate);
 
       let shopifyBox = await models.ShopifyBox.findOne({
         where: {shopify_product_id: values.shopify_product_id}
@@ -184,7 +186,7 @@ const resolvers = {
       };
 
       const box = await models.Box.create({
-        delivered,
+        delivered: deliveryDate,
         ShopifyBoxId: parseInt(shopifyBox.id),
       });
 
