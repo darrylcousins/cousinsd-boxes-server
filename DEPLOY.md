@@ -16,8 +16,16 @@ Not possible without shopify approval. So i've installed instead on non-transfer
 4. Migrate empty database:
 
 ```bash
-# heroku pg:reset --confirm APP DATABASE_URL
-PGUSER=cousinsd PGPASSWORD=******** heroku pg:push shopify_boxes DATABASE_URL
+# heroku pg:reset --confirm {APP} DATABASE_URL
+PGUSER=cousinsd PGPASSWORD=******** heroku pg:push shopify_boxes DATABASE_URL -a {APP}
+```
+
+# Postgres
+
+Access to database on command line:
+
+```bash
+heroku pg:psql -a {APP}
 ```
 
 # Download the store theme
@@ -41,9 +49,9 @@ Make our branch, build, copy to theme, and deploy from there.
 
 ```bash
 https://github.com/darrylcousins/shopify-boxes-client.git
-git checkout -b APP
+git checkout -b {APP}
 vi src/config.js # fix host url
-git push origin APP
+git push origin {APP}
 npm install
 npm run component
 cp dist/boxes.bundle.js ../theme/assets
