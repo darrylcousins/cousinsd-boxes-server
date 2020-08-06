@@ -52,7 +52,7 @@ export default function BoxDelete({ open, box, onComplete, onCancel }) {
           <Modal
             open={modalOpen}
             onClose={toggleModalOpen}
-            title={`Are you sure you want to delete ${instance.shopify_title}?`}
+            title={`Are you sure you want to delete ${instance.shopifyBox.shopify_title}?`}
             primaryAction={{
               content: "Yes, I'm sure",
               onAction: deleteBox,
@@ -70,8 +70,7 @@ export default function BoxDelete({ open, box, onComplete, onCancel }) {
               { isLoading ? isLoading :
                 <TextContainer>
                   <p>
-                    Deleting box.  { instance.id }
-                    This action cannot be undone.
+                    Deleting <strong>{ instance.shopifyBox.shopify_title }</strong> This action cannot be undone.
                   </p>
                 </TextContainer>
               }
