@@ -7,7 +7,8 @@ const fetch = require('isomorphic-fetch');
 // next-css needed for polaris to load css files
 // XXX next now has another way of creating globals - catch up!
 
-if (process.env.NODE_ENV === 'production') {
+//if (process.env.NODE_ENV === 'production') {
+if (true) {
 
   myexports = withCSS({
     webpack: (config) => {
@@ -27,7 +28,6 @@ if (process.env.NODE_ENV === 'production') {
           'Subscription',
           'Add on product to'
         ]),
-        REACT1: require('react'),
         fetch: fetch,
       };
       config.plugins.push(new webpack.DefinePlugin(env));
