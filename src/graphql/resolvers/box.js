@@ -201,6 +201,10 @@ const resolvers = {
     async duplicateBox (root, { input }, context, info) {
       let { id, delivered } = input;
 
+      console.log('got this date to duplicate on', delivered);
+      const deliveryDate = moment(delivered)
+      console.log('but using the moment', deliveryDate);
+
       // where input can be almost anything
       const box = await models.Box.findOne({
         where: { id },
@@ -209,7 +213,7 @@ const resolvers = {
       const products = box.Products;
       const values = box.toJSON();
       delete values.id;
-      values.delivered = UTCDateOnly(delivered);
+      values.delivered = deliveryDate();
       delete values.Products;
 
       const newBox = await models.Box.create(values);
