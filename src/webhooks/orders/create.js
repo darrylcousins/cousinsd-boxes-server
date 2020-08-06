@@ -1,11 +1,12 @@
 const models = require('../../db/models');
+const moment = require('moment');
 const { LABELKEYS, numberedStringToHandle, listOfToArray, getTotalPrice, getQuantities } = require('./lib');
 
 const orderCreate = async (webhook) => {
   const [delivery_date, p_in, p_add, p_dislikes, subscribed, addprod] = LABELKEYS;
 
   const payload = webhook.payload;
-  console.log('Received Create Order:');
+  console.log('Received Create Order:', payload.line_items.length);
 
   // a map of the container boxes found in line items
   let box_map = new Map();
@@ -19,8 +20,11 @@ const orderCreate = async (webhook) => {
       (acc, curr) => Object.assign(acc, { [`${curr.name}`]: curr.value }),
       {});
 
-    if (delivery_date in attrs && p_in in attrs && p_add in attrs) {
+    console.log('got attributes', JSON.stringify(attrs, null, 2));
+    //if (delivery_date in attrs && p_in in attrs && p_add in attrs) {
+    if (delivery_date in attrs && p_in in attrs) {
       // XXX we have a container box
+      console.log('have a container box');
       //
       const subscription = subscribed in attrs ? attrs[subscribed] : null;
       const delivery = attrs[delivery_date];
@@ -43,6 +47,7 @@ const orderCreate = async (webhook) => {
       const delivered = attrs[delivery_date];
       let key = `${delivered}::${attrs[addprod]}`;
 
+      console.log('have a product add on');
       const tempProduct = {
         box_product_name: attrs[addprod],
         handle: numberedStringToHandle(item.title),
@@ -67,7 +72,9 @@ const orderCreate = async (webhook) => {
   console.log('box_map:', JSON.stringify(box_map, null, 2));
   console.log('product_map:', JSON.stringify(produce_map, null, 2));
   for (let key of box_map.keys()) {
+    console.log('box map key', key);
     let [delivered, box_title] = key.split('::');
+    console.log('the bits', delivered, box_title);
     let boxItem = box_map.get(key);
     let productItems = produce_map.has(key) ? produce_map.get(key) : [];
 
@@ -76,6 +83,7 @@ const orderCreate = async (webhook) => {
         shopify_variant_id: boxItem.shopify_variant_id,
         shopify_product_id: boxItem.shopify_product_id,
       },
+      attributes: ['id'],
     });
     let box;
     let boxId;
@@ -85,16 +93,20 @@ const orderCreate = async (webhook) => {
       box = null;
       boxId = null;
     } else {
+      console.log('searching for box with', shopifyBox.id, moment(delivered));
       box = await models.Box.findOne({
         where: {
           ShopifyBoxId: shopifyBox.id,
-          delivered: new Date(delivered),
+          delivered: moment(delivered),
         },
+        attributes: ['id'],
         include: {
           model: models.ShopifyBox,
           attribute: ['shopify_product_id', 'id'],
         }
       });
+      console.log('Found a box', JSON.stringify(box, null, 2));
+      boxId = box.id;
     };
 
     let addOnProducts = listOfToArray(boxItem.addons);
@@ -150,11 +162,11 @@ const orderCreate = async (webhook) => {
       console.log('Subscriber', subscriber.toJSON());
       console.log('Subscription', subscription.toJSON());
     };
-    console.log(customer.toJSON());
+    console.log('customer', customer.toJSON());
     const order_input = {
       shopify_title: shopify_title,
-      shopify_order_id,
-      shopify_line_item_id: boxItem.line_item_id,
+      shopify_order_id: parseInt(shopify_order_id),
+      shopify_line_item_id: parseInt(boxItem.line_item_id),
       BoxId: boxId,
       CustomerId: customer.id,
       SubscriptionId: null, // TODO XXX
