@@ -174,7 +174,7 @@ const resolvers = {
       /* shopify_product_id, shopify_title, shopify_handle, shopify_price, shopify_variant_id, delivered */
       let { delivered, ...values } = input;
       console.log('got this date to add', delivered);
-      const deliveryDate = moment(delivered)
+      const deliveryDate = moment(delivered).add(1, 'days');
       console.log('but using the moment', deliveryDate);
 
       let shopifyBox = await models.ShopifyBox.findOne({
@@ -202,7 +202,7 @@ const resolvers = {
       let { id, delivered } = input;
 
       console.log('got this date to duplicate on', delivered);
-      const deliveryDate = moment(delivered)
+      const deliveryDate = moment(delivered).add(1, 'days');
       console.log('but using the moment', deliveryDate);
 
       // where input can be almost anything
@@ -213,7 +213,7 @@ const resolvers = {
       const products = box.Products;
       const values = box.toJSON();
       delete values.id;
-      values.delivered = deliveryDate();
+      values.delivered = deliveryDate;
       delete values.Products;
 
       const newBox = await models.Box.create(values);
@@ -232,16 +232,13 @@ const resolvers = {
     },
     async updateBox (root, { input }, context, info) {
       const { id, ...props } = input;
-      console.log(JSON.stringify(input, null, 2));
       const res = await models.Box.update(
         props,
         { where: { id } }
       );
-      console.log(res);
       const box = await models.Box.findByPk(
         id,
       );
-      console.log(JSON.stringify(box, null, 2));
       return box;
     },
     async deleteBox (root, { input }, context, info) {
