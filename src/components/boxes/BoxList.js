@@ -133,6 +133,11 @@ export default function BoxList() {
           */
         };
         /* Hold this back for now XXX TODO
+            <BoxShopTitle
+              key={2}
+              id={parseInt(box.id)}
+              title={box.shopifyBox.shopify_title}
+            />,
             <ItemDatePicker
               key={3}
               id={parseInt(box.id)}
@@ -145,6 +150,7 @@ export default function BoxList() {
             */
 
         const tableRows = (rows.length === 0) ? Array(0) : rows.map((box) => {
+          console.log(JSON.stringify(box, null, 2));
           return [
             <Checkbox 
               key={0}
@@ -154,11 +160,10 @@ export default function BoxList() {
               onChange={handleCheckedChange}
               checked={checked && checkedId === box.id}
             />,
-            <BoxShopTitle
-              key={2}
-              id={parseInt(box.id)}
-              title={box.shopifyBox.shopify_title}
-            />,
+            <TextStyle
+              variation='subdued'>
+                {box.shopifyBox.shopify_title}
+            </TextStyle>,
             <TextStyle
               variation='subdued'>
                 {new Date(box.delivered).toDateString()}

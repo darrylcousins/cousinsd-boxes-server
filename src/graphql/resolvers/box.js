@@ -173,6 +173,9 @@ const resolvers = {
     async createBox (root, { input }, context, info) {
       /* shopify_product_id, shopify_title, shopify_handle, shopify_price, shopify_variant_id, delivered */
       let { delivered, ...values } = input;
+
+      // this is dependent on timezone how do I fix this??
+      // need to add the extra day when using heroku
       console.log('got this date to add', delivered);
       const deliveryDate = moment(delivered).add(1, 'days');
       console.log('but using the moment', deliveryDate);
