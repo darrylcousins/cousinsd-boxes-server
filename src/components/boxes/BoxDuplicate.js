@@ -57,7 +57,7 @@ export default function BoxDuplicate({ open, box, onComplete, onCancel }) {
               }
               const variables = {
                 input: {
-                  delivered: dateOnly(selectedDate),
+                  delivered: selectedDate,
                   id: instance.id,
                 }
               };

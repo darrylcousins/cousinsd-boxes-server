@@ -35,7 +35,7 @@ export default function BoxAdd({ onComplete, refetch }) {
         const handleBoxAdd = () => {
           const variables = {
             input: {
-              delivered: dateOnly(selectedDate),
+              delivered: selectedDate,
               shopify_title: storeProduct.title,
               shopify_product_id: parseInt(storeProduct.id.split('/')[4]),
               shopify_handle: storeProduct.handle,
