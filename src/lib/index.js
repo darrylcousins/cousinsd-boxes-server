@@ -162,10 +162,12 @@ const dateOnly = (date) => {
   } else if (!date) {
     date = new Date();
   };
-  var year = date.getFullYear();
-  var month = date.getMonth();
-  var day = date.getDate();
-  return new Date(year,month,day);
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const day = date.getDate();
+  const res = new Date(year, month, day);
+  console.log('got this date to save', res);
+  return res;
 }
 
 const UTCDateOnly = (date) => {

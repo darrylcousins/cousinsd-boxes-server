@@ -33,6 +33,8 @@ export default function BoxAdd({ onComplete, refetch }) {
         );
 
         const handleBoxAdd = () => {
+          console.log('got this date', selectedDate);
+          console.log('got this date to add', dateOnly(selectedDate));
           const variables = {
             input: {
               delivered: dateOnly(selectedDate),

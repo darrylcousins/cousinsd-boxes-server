@@ -15,7 +15,6 @@ import { useQuery, execute } from '@apollo/client';
 import { ShopifyHttpLink } from '../../graphql/client';
 import { LocalHttpLink } from '../../graphql/client';
 import {
-  dateOnly,
   dateToISOString,
   UTCDateOnly,
   makePromise,

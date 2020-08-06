@@ -1,24 +1,40 @@
 ## Deployment
 
-# Create a transferrable development store
+# Create a shopify store
 
-Not possible without shopify approval. So i've installed instead on non-transferable store.
-
-1. Create public app on partners shopify
-2. Use url https://APP.herokuapp.com and /auth/callback
-3. Collect SHOPIFY_API_KEY and SHOPIFY_SECRET_API_KEY
+That's a job for the client who may already have a store.
 
 # Create a Heroku account
 
 1. Create app
 2. Resources -> add postgres
-3. Settings -> nodejs buildpack and config vars: SHOPIFY_API_KEY, SHOPIFY_SECRET_API_KEY, HOST, API_VERSION, SHOP_NAME
+3. Settings -> nodejs buildpack and config vars: HOST (https://{APP}/herokuapp.com)
 4. Migrate empty database:
 
 ```bash
 # heroku pg:reset --confirm {APP} DATABASE_URL
 PGUSER=cousinsd PGPASSWORD=******** heroku pg:push shopify_boxes DATABASE_URL -a {APP}
 ```
+
+# Build server
+
+Don't need a branch for this one because it has the environment variables.
+
+```bash
+git clone https://github.com/darrylcousins/shopify-boxes-server.git
+cd shopify-boxes-server
+heroku git:remote -a {APP}
+git push heroku main
+```
+
+# Create an app
+
+Done through the shopify partners account.
+
+1. Create public app on partners shopify
+2. Use url https://APP.herokuapp.com and /auth/callback
+3. Collect SHOPIFY_API_KEY and SHOPIFY_SECRET_API_KEY
+3. Back to heroku dyno config vars: SHOPIFY_API_KEY, SHOPIFY_SECRET_API_KEY, API_VERSION, SHOP_NAME
 
 # Postgres
 
@@ -58,24 +74,17 @@ cp dist/boxes.bundle.js ../theme/assets
 cd ../theme
 theme deploy assets/boxes.bundle.js
 ```
-
-Edit cart template and others. TODO.
-
-# Build server
-
-Don't need a branch for this one because it has the environment variables.
-
-```bash
-https://github.com/darrylcousins/shopify-boxes-server.git
-heroku git:remote -a APP
-git push heroku main
-```
+#Finally
 
 * Set up container boxes on development store (box-container-products.csv)
 * Set up produce on development store (box-produce-products.csv)
 * Verify that webhooks added products to Heroku database
 
-How to get this in from the developement?
+Edit cart template and others. TODO.
+
+# Concerns
+
+How to get this in from the development?
 ```json
 "@cousinsd/shopify-boxes-client": "file:../shopify-boxes-client"
 ```
