@@ -5,7 +5,8 @@ const isServer = typeof window === 'undefined';
 export default App => {
 //const App = () => {
   return class AppWithReactRouter extends React.Component {
-    static async getInitialProps(appContext) {
+    static async getStaticProps(appContext) {
+      console.log(appContext);
       const {
         ctx: {
           req: {
@@ -21,11 +22,6 @@ export default App => {
     }
 
     render() {
-      return (
-        <BrowserRouter>
-          <App {...this.props} />
-        </BrowserRouter>
-      );
       if (isServer) {
         const {StaticRouter} = require('react-router');
         return (
