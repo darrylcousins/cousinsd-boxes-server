@@ -24,9 +24,12 @@ export default App => {
     render() {
       if (isServer) {
         const {StaticRouter} = require('react-router');
+        console.log('the props', this.props);
+        console.log('the context', this.context);
+        //location={this.props.originalUrl}
         return (
           <StaticRouter
-            location={this.props.originalUrl}
+            location='/'
             context={this.props.context}
           >
             <App {...this.props} />
