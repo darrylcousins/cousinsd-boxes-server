@@ -3,6 +3,7 @@ const models = require('../../db/models');
 const { UTCDateOnly, dateToISOString, filterFields } = require('../../lib');
 const sequelize = require('sequelize');
 const parseFields = require('graphql-parse-fields')
+const moment = require('moment');
 
 const resolvers = {
   Order: {
@@ -31,7 +32,7 @@ const resolvers = {
       let { delivered, limit, offset, shopify_product_id, shopify_title } = input;
       if (!delivered) delivered = new Date();
 
-      delivered = new Date(delivered).toUTCString();
+      delivered = moment(delivered);
 
       const where = {};
       if (shopify_title) where.shopify_title = {[Op.substring]: shopify_title};

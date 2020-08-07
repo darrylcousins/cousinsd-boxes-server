@@ -27,10 +27,11 @@ export default App => {
         console.log('the props', this.props);
         console.log('the context', this.context);
         //location={this.props.originalUrl}
+        //context={this.props.context}
         return (
           <StaticRouter
             location='/'
-            context={this.props.context}
+            context={{}}
           >
             <App {...this.props} />
           </StaticRouter>
