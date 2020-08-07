@@ -94,3 +94,11 @@ How to get this in from the development?
 Using this link you swap around different stores - but just one at a time.
 
 https://shopify-graphiql-app.shopifycloud.com/login
+
+# Cache problems
+
+```bash
+heroku config:set NODE_MODULES_CACHE=false -a APP
+git commit -am 'disable node_modules cache' --allow-empty
+git push heroku master
+```

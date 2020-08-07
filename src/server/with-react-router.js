@@ -4,6 +4,7 @@ const isServer = typeof window === 'undefined';
 
 export default App => {
   return class AppWithReactRouter extends React.Component {
+    /*
     static async getInitialProps(appContext) {
       //console.log(appContext);
       const {
@@ -19,6 +20,7 @@ export default App => {
         context: locals.context || {},
       };
     }
+    */
 
     render() {
       if (isServer) {
