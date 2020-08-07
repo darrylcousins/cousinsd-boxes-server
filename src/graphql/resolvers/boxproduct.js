@@ -17,7 +17,7 @@ const resolvers = {
       // filter out any that are already in boxproducts
       const currentProdIds = await models.BoxProduct.findAll({
         attributes: ['ProductId'],
-        where: { BoxId: 11 },
+        where: { BoxId: boxId },
         raw: true,
       }).then((prods) => prods.map(el => el.ProductId));
 
