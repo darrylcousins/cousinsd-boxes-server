@@ -2,11 +2,11 @@ import React from 'react';
 import {BrowserRouter} from 'react-router-dom';
 const isServer = typeof window === 'undefined';
 
-export default App => {
+function WithApp(App) {
 //const App = () => {
   return class AppWithReactRouter extends React.Component {
-    static async getStaticProps(appContext) {
-      console.log(appContext);
+    static async getInitialProps(appContext) {
+      //console.log(appContext);
       const {
         ctx: {
           req: {
@@ -15,6 +15,8 @@ export default App => {
           },
         },
       } = appContext;
+      console.log('original url:', originalUrl);
+      console.log('locals:', locals.context);
       return {
         originalUrl,
         context: locals.context || {},
@@ -24,14 +26,14 @@ export default App => {
     render() {
       if (isServer) {
         const {StaticRouter} = require('react-router');
-        console.log('the props', this.props);
-        console.log('the context', this.context);
+        //console.log('the props', this.props);
+        //console.log('the context', this.context);
         //location={this.props.originalUrl}
         //context={this.props.context}
         return (
           <StaticRouter
-            location='/'
-            context={{}}
+            location={this.props.originalUrl}
+            context={this.props.context}
           >
             <App {...this.props} />
           </StaticRouter>
@@ -45,5 +47,4 @@ export default App => {
     }
   };
 };
-
-//export default new App();
+export default WithApp;

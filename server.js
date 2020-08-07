@@ -337,19 +337,6 @@ app.prepare().then(() => {
     ctx.respond = false;
     ctx.res.statusCode = 200;
 
-    //try {
-      // Provide react-router static router with a context object
-      // https://reacttraining.com/react-router/web/guides/server-rendering
-      // console.log(ctx);
-    //  ctx.req.locals = {};
-    //  ctx.req.locals.context = {};
-    //  ctx.respond = false;
-    //  ctx.res.statusCode = 200;
-    //  app.render(ctx.req, ctx.res, '/');
-    //} catch(e) {
-    //  console.log(e);
-    //  next(e);
-    //}
   });
 
   server.use(router.allowedMethods());

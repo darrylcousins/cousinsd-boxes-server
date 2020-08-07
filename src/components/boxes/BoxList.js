@@ -150,7 +150,7 @@ export default function BoxList() {
             */
 
         const tableRows = (rows.length === 0) ? Array(0) : rows.map((box) => {
-          console.log(JSON.stringify(box, null, 2));
+          //console.log(JSON.stringify(box, null, 2));
           return [
             <Checkbox 
               key={0}
