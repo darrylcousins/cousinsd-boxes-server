@@ -14,15 +14,25 @@ const resolvers = {
         { where: { shopify_id: { [Op.in]: productIds }} }
       );
 
+      // filter out any that are already in boxproducts
+      const currentProdIds = await models.BoxProduct.findAll({
+        attributes: ['ProductId'],
+        where: { BoxId: 11 },
+        raw: true,
+      }).then((prods) => prods.map(el => el.ProductId));
+
       try {
         products.forEach(async (product) => {
-          var values = { isAddOn, BoxId: boxId, ProductId: product.id };
-          // find ob in the array
-          await models.BoxProduct.create(values);
+          if (!currentProdIds.includes(product.id)) {
+            var values = { isAddOn, BoxId: boxId, ProductId: product.id };
+            await models.BoxProduct.create(values);
+          } else {
+            console.log('rejecting', product.shopify_title);
+          }
         });
         return true;
       } catch(e) {
-        throw new UserInputError('Failed to remove product to box', {
+        throw new UserInputError('Failed to add product to box', {
           invalidArgs: Object.keys(input),
         });
       };

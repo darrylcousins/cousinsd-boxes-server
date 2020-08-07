@@ -88,3 +88,9 @@ How to get this in from the development?
 ```json
 "@cousinsd/shopify-boxes-client": "file:../shopify-boxes-client"
 ```
+
+# Graphql testing on site
+
+Using this link you swap around different stores - but just one at a time.
+
+https://shopify-graphiql-app.shopifycloud.com/login
