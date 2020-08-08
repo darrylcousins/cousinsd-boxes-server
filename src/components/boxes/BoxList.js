@@ -13,7 +13,8 @@ import {
   Toast,
 } from '@shopify/polaris';
 import {
-    MinusMinor
+  MinusMinor,
+  ViewMinor,
 } from '@shopify/polaris-icons';
 import { Query } from '@apollo/react-components';
 import { execute, useQuery } from '@apollo/client';
@@ -24,6 +25,7 @@ import LoadingPageMarkup from '../common/LoadingPageMarkup';
 import ItemDatePicker from '../common/ItemDatePicker';
 import DateSelector from '../common/DateSelector';
 import SheetHelper from '../common/SheetHelper';
+import ContextLink from '../common/ContextLink';
 import BoxActions from './BoxActions';
 import BoxShopTitle from './BoxShopTitle';
 import BoxProductList from './BoxProductList';
@@ -160,14 +162,20 @@ export default function BoxList() {
               onChange={handleCheckedChange}
               checked={checked && checkedId === box.id}
             />,
-            <TextStyle
-              variation='subdued'>
-                {box.shopifyBox.shopify_title}
-            </TextStyle>,
+            <ContextLink
+              shopifyId={ box.shopifyBox.shopify_product_id }
+              title={box.shopifyBox.shopify_title}
+            />,
             <TextStyle
               variation='subdued'>
                 {new Date(box.delivered).toDateString()}
             </TextStyle>,
+            <Button
+              external
+              plain
+              url={ `https://${ SHOP_NAME }.myshopify.com/products/${ box.shopifyBox.shopify_handle }` }
+              icon={ ViewMinor }
+            />,
             <BoxProductList
               key={4}
               id={parseInt(box.id)}
@@ -249,8 +257,9 @@ export default function BoxList() {
                   ) : '' ),
                   <strong key={2}>Store Product</strong>,
                   <strong key={3}>Delivery Date</strong>,
-                  <strong key={4}>Included Produce</strong>,
-                  <strong key={5}>Add On Produce</strong>,
+                  <strong key={4}>Preview</strong>,
+                  <strong key={5}>Included Produce</strong>,
+                  <strong key={6}>Add On Produce</strong>,
                 ]}
                 rows={tableRows}
               />

@@ -12,7 +12,9 @@ export default function LineItemProductList({ list, produce }) {
   const ulRef = useRef(null);
 
   useEffect(() => {
-    ulRef.current.style.setProperty('--max-height', ulRef.current.scrollHeight + 'px'); 
+    if (ulRef.current) {
+      ulRef.current.style.setProperty('--max-height', ulRef.current.scrollHeight + 'px'); 
+    }
   });
 
   return (

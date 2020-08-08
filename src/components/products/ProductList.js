@@ -6,14 +6,14 @@ import {
   EmptyState,
   Layout,
   Loading,
+  TextStyle,
 } from '@shopify/polaris';
 import { Query } from '@apollo/react-components';
-import { Redirect } from "@shopify/app-bridge/actions";
-import { Context } from '@shopify/app-bridge-react'
 import { numberFormat } from '../../lib';
 import LoadingPageMarkup from '../common/LoadingPageMarkup';
 import Editable from '../common/Editable';
 import Switch from '../common/Switch';
+import ContextLink from '../common/ContextLink';
 import { ProductQueries, ProductMutations, ShopifyMutations } from '../../graphql/queries';
 
 export default function ProductList() {
@@ -34,36 +34,28 @@ export default function ProductList() {
           </React.Fragment>
         );
 
+        /*
+          <Editable 
+            key={0}
+            title={product.shopify_title}
+            context={ { shopify: true } }
+            id={product.shopify_gid}
+            fieldName='title'
+            mutation={ShopifyMutations.productUpdate}
+            update={(data) => null}
+            textStyle='strong'
+          />,
+        */
         /* datatable stuff */
         const rows = (isLoading || !data) ? Array(3) : data.getAllProducts.map((product) => (
           [
-            <Editable 
-              key={0}
-              title={product.shopify_title}
-              context={ { shopify: true } }
-              id={product.shopify_gid}
-              fieldName='title'
-              mutation={ShopifyMutations.productUpdate}
-              update={(data) => null}
-              textStyle='strong'
+            <TextStyle 
+              variation="subdued">
+              { product.shopify_title }
+            </TextStyle>,
+            <ContextLink 
+              shopifyId={product.shopify_id}
             />,
-            <Context.Consumer>
-              { app => {
-                const redirect = Redirect.create(app);
-                return (
-                  <Button 
-                    plain
-                    external
-                    onClick={() => redirect.dispatch(
-                      Redirect.Action.ADMIN_PATH,
-                      { path: `/products/${product.shopify_id}`, newContext: true }
-                    )}
-                  >
-                    View in store
-                  </Button>
-                );
-              }}
-              </Context.Consumer>,
             <Switch
               key={1}
               id={product.id}
@@ -87,7 +79,7 @@ export default function ProductList() {
                 columnContentTypes={Array(2).fill('text').concat(['number'])}
                 headings={[
                   <strong key={0}>Title</strong>,
-                  <strong key={1}>View in store</strong>,
+                  <strong key={1}>Edit</strong>,
                   <strong key={2}>Available</strong>,
                   <strong key={3}>Price</strong>,
                 ]}
