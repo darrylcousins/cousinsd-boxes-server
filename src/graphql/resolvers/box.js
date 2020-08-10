@@ -92,6 +92,7 @@ const resolvers = {
     async getBoxesByDelivered(root, { input }, context, info) {
       // return count, and rows
       let { delivered, limit, offset } = input;
+      //delivered = moment(delivered, 'ddd MMM DD YYYY');
       const fields = parseFields(info);
       //console.log(fields);
       const include = [];
@@ -114,6 +115,7 @@ const resolvers = {
     async getAllBoxesByDelivered(root, { input }, context, info) {
       // return list of boxes
       let { delivered } = input;
+      //delivered = moment(delivered, 'ddd MMM DD YYYY');
       const fields = parseFields(info);
       const include = [];
       if (fields.shopifyBox) include.push(getBoxShopifyBoxInclude(fields));

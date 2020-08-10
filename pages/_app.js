@@ -7,7 +7,6 @@ import Cookies from 'js-cookie';
 import { ApolloProvider } from '@apollo/client';
 import translations from '@shopify/polaris/locales/en.json';
 import { Client } from './../src/graphql/client';
-import withReactRouter from './../src/server/with-react-router';
 import './order.css';
 
 const MyApp = ({ Component, pageProps }) => {
@@ -33,4 +32,4 @@ const MyApp = ({ Component, pageProps }) => {
   );
 }
 
-export default withReactRouter(MyApp);
+export default MyApp;

@@ -84,6 +84,19 @@ export default function OrderList({ query, input, checkbox, LineCheckbox }) {
                 var attrs = node.customAttributes.reduce(
                   (acc, curr) => Object.assign(acc, { [`${curr.key}`]: curr.value }),
                   {});
+                
+                //console.log(attrs['ShopID'].split('\n').join(''));
+                const base64 = attrs['ShopID'].split('\n').join('');
+                const buff2 = Buffer.from(base64, 'base64');
+                const res = buff2.toString('utf-8');
+                const productIds = JSON.parse(res);
+                //console.log(productIds);
+
+                const addOnProductIds = productIds.a;
+                // include quantity
+                const dislikeProductIds = productIds.d.map(el => [el, 1]);
+                const includeProductIds = productIds.i.map(el => [el, 1]);
+
                 if (new Date(attrs[delivery_date]).toDateString() == deliveryDate) {
                   let lineid = node.id.split('/').pop();
                   row.push(!done ? 
@@ -121,9 +134,9 @@ export default function OrderList({ query, input, checkbox, LineCheckbox }) {
                   );
                   row.push(node.quantity);
                   row.push(attrs[delivery_date]);
-                  row.push(<LineItemProductList key={i} list={attrs[including]} />);
-                  row.push(<LineItemProductList key={i} list={attrs[addons]} produce={produce} />);
-                  row.push(<LineItemProductList key={i} list={attrs[removed]} />);
+                  row.push(<LineItemProductList key={i} idList={includeProductIds} />);
+                  row.push(<LineItemProductList key={i} idList={addOnProductIds} produce={produce} />);
+                  row.push(<LineItemProductList key={i} idList={dislikeProductIds} />);
                   row.push(<OrderAddress address={order.shippingAddress} customer={order.customer} />);
                   rows.push(row);
                   done = true;

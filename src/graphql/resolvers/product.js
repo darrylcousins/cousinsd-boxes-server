@@ -31,6 +31,18 @@ const resolvers = {
         order: [['shopify_title']],
       });
     },
+    async getProducts(instance, { input }, context, info) {
+      const fields = parseFields(info);
+      const { ids } = input;
+      const products = await models.Product.findAll(
+        { 
+          where: { id: { [Op.in]: ids }},
+          attributes: getProductAttributes(fields),
+          order: [['shopify_title']],
+        }
+      );
+      return products;
+    },
   },
   Mutation: {
     async toggleProductAvailable (root, { input }, { models }, info) {

@@ -119,39 +119,43 @@
   "line_items": [
     {
       "id": 5034635362362,
-      "variant_id": 31712536330298,
-      "title": "Medium Vege - Seasonal Organic Box",
+      "variant_id": 35604059422870,
+      "title": "Small Veggie Box",
       "quantity": 1,
       "sku": "MV",
       "variant_title": "",
       "vendor": "Spring Collective",
       "fulfillment_service": "manual",
-      "product_id": 4486431899706,
+      "product_id": 5572620320918,
       "requires_shipping": true,
       "taxable": true,
       "gift_card": false,
-      "name": "Medium Vege - Seasonal Organic Box",
+      "name": "Small Veggie Box",
       "variant_inventory_management": "shopify",
       "properties": [
         {
           "name": "Delivery Date",
-          "value": "Sat Aug 01 2020"
+          "value": "Fri Aug 14 2020"
         },
         {
           "name": "Including",
-          "value": "Yams, Brocolli, Beans Green, Dill, Snow Peas"
+          "value": "Agria Potato, Apples NZ Rose, Baby Kale, Swedes, Tomatoes, Turnips, Zucchini, Sweet Corn, Watermelon"
         },
         {
           "name": "Add on items",
-          "value": "Pumpkin Butternut, Parsnips (2)"
+          "value": "Celery (2), Cucumber"
         },
         {
           "name": "Removed items",
-          "value": "Seeded Sourdough Bread"
+          "value": "Yams"
+        },
+        {
+          "name": "ShopID",
+          "value": "eyJpIjpbIjUxIiw\niNTIiLCI1MyIsIj\nk0IiwiOTUiLCI5N\niIsIjEwMCIsIjk3\nIiwiOTgiXSwiYSI\n6W1siNjUiLDJdLF\nsiNjYiLDFdXSwiZ\nCI6WyI5OSJdfQ=="
         },
         {
           "name": "Subscription",
-          "value": "Weekly"
+          "value": ""
         }
       ],
       "product_exists": true,
@@ -197,14 +201,14 @@
     },
     {
       "id": 5034635395130,
-      "variant_id": 31792461840442,
-      "title": "Parsnips",
+      "variant_id": 35604082720918,
+      "title": "Celery",
       "quantity": 2,
       "sku": "",
       "variant_title": "",
       "vendor": "Spring Collective",
       "fulfillment_service": "manual",
-      "product_id": 4502212378682,
+      "product_id": 5572623335574,
       "requires_shipping": true,
       "taxable": true,
       "gift_card": false,
@@ -213,11 +217,11 @@
       "properties": [
         {
           "name": "Delivery Date",
-          "value": "Sat Aug 01 2020"
+          "value": "Fri Aug 14 2020"
         },
         {
           "name": "Add on product to",
-          "value": "Medium Vege - Seasonal Organic Box"
+          "value": "Small Veggie Box"
         }
       ],
       "product_exists": true,
@@ -263,27 +267,27 @@
     },
     {
       "id": 5034635427898,
-      "variant_id": 31792460464186,
-      "title": "Pumpkin Butternut",
+      "variant_id": 35604082753686,
+      "title": "Cucumber",
       "quantity": 1,
       "sku": "",
       "variant_title": "",
       "vendor": "Spring Collective",
       "fulfillment_service": "manual",
-      "product_id": 4502212411450,
+      "product_id": 5572623368342,
       "requires_shipping": true,
       "taxable": true,
       "gift_card": false,
-      "name": "Pumpkin Butternut",
+      "name": "Cucumber",
       "variant_inventory_management": "shopify",
       "properties": [
         {
           "name": "Delivery Date",
-          "value": "Sat Aug 01 2020"
+          "value": "Fri Aug 14 2020"
         },
         {
           "name": "Add on product to",
-          "value": "Medium Vege - Seasonal Organic Box"
+          "value": "Small Veggie Box"
         }
       ],
       "product_exists": true,

@@ -1,4 +1,4 @@
-import { dateToISOString } from '../../lib';
+import { numberedStringToHandle, dateToISOString } from '../../lib';
 
 const createLabelDoc = ({ data, delivered }) => {
 
@@ -60,10 +60,14 @@ const createLabelDoc = ({ data, delivered }) => {
         /* Every second table goes into right column */
         /* make list of paid for products to draw upon */
         var produce = Array();
-        for (let j = 0; j < lineItems.length; j++) {
-          let node = lineItems[i].node;
+        for (let k = 0; k < lineItems.length; k++) {
+          let node = lineItems[k].node;
 
           // XXX TODO check for correct date for box association (hint: uses customAttributes)
+          var custAttr = lineItems[k].node.customAttributes.reduce(
+            (acc, curr) => Object.assign(acc, { [`${curr.key}`]: curr.value }),
+            {});
+          console.log(custAttr[delivery_date]);
           if (node.product.productType == 'Box Produce') {
             produce.push(node.product.handle);
           }
@@ -90,10 +94,12 @@ const createLabelDoc = ({ data, delivered }) => {
             column2.push({ style: 'productheader', text: `${addons}` });
             products = customAttributes[addons].split(',').map(el => el.trim()).filter(el => el !== '');
 
+            console.log('before', products);
             products = products.filter(el => {
-              const handle = el.replace(' ', '-').toLowerCase();
+              const handle = numberedStringToHandle(el);
               return (produce.indexOf(handle) > -1);
             });
+            console.log('after', products);
 
             column2.push({ style: 'product', text: products.join('\n') });
 

@@ -26,7 +26,8 @@ if (true) {
           'Add on items', 
           'Removed items', 
           'Subscription',
-          'Add on product to'
+          'Add on product to',
+          'ShopID',
         ]),
         fetch: fetch,
       };

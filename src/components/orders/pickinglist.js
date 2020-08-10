@@ -2,7 +2,7 @@ import { numberedStringToHandle, keySort } from '../../lib';
 
 const createPickingDoc = ({ data, delivered }) => {
 
-  const [delivery_date, including, addons, removed, subscription] = LABELKEYS;
+  const [delivery_date, including, addons, removed, subscription, idCode] = LABELKEYS;
 
   let errors;
   
@@ -67,6 +67,7 @@ const createPickingDoc = ({ data, delivered }) => {
               }
             }
           });
+          console.log(attrs[idCode]);
         }
       }
     }

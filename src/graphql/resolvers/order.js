@@ -30,9 +30,9 @@ const resolvers = {
       const fields = parseFields(info);
 
       let { delivered, limit, offset, shopify_product_id, shopify_title } = input;
-      if (!delivered) delivered = new Date();
+      if (!delivered) delivered = new Date().toDateString();
 
-      delivered = moment(delivered);
+      delivered = moment(delivered, 'ddd MMM DD YYYY');
 
       const where = {};
       if (shopify_title) where.shopify_title = {[Op.substring]: shopify_title};

@@ -35,6 +35,10 @@ const root = gql`
     id: ID!
   }
 
+  input IdsInput {
+    ids: [ID]!
+  }
+
 `;
 
 const typeDefs = [

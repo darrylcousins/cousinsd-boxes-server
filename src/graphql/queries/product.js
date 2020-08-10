@@ -37,6 +37,16 @@ const ProductQueries = {
       }
     }
   `,
+
+  getProducts: gql`
+    query getProducts($input: IdsInput!) {
+      getProducts(input: $input) {
+        id
+        shopify_title
+        shopify_handle
+      }
+    }
+  `,
 }
 
 const ProductMutations = {

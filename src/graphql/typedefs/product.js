@@ -42,6 +42,7 @@ const product = gql`
 
   extend type Query {
     getProduct(input: IdInput!): Product
+    getProducts(input: IdsInput!): [Product]
     getAllProducts: [Product]
   }
 
