@@ -25,14 +25,7 @@ const MyApp = ({ Component, pageProps }) => {
         <AppProvider i18n={translations}>
           <ApolloProvider client={Client}>
             <Frame>
-              <Context.Consumer>
-                { app => {
-                  app.subscribe(Redirect.ActionType.APP, function(redirectData) {
-                      console.log(redirectData.path); // For example, '/settings'
-                  });
-                  return <Component {...pageProps} />
-                }}
-              </Context.Consumer>
+              <Component {...pageProps} />
             </Frame>
           </ApolloProvider>
         </AppProvider>
@@ -42,3 +35,13 @@ const MyApp = ({ Component, pageProps }) => {
 }
 
 export default MyApp;
+/*
+              <Context.Consumer>
+                { app => {
+                  app.subscribe(Redirect.ActionType.APP, function(redirectData) {
+                      console.log(redirectData.path); // For example, '/settings'
+                  });
+                  return <Component {...pageProps} />
+                }}
+              </Context.Consumer>
+              */
