@@ -26,14 +26,13 @@ const orderCreate = async (webhook) => {
     if (delivery_date in attrs && p_in in attrs) {
       // XXX we have a container box
       
-      /* ProductIds as i, a, d
+      /* ProductIds as i, a, d */
       console.log(attrs['ShopID'].split('\n').join(''));
       const base64 = attrs['ShopID'].split('\n').join('');
       const buff2 = Buffer.from(base64, 'base64');
       const res = buff2.toString('utf-8');
       const productIds = JSON.parse(res);
       console.log(productIds);
-      */
 
       const subscription = subscribed in attrs ? attrs[subscribed] : null;
       const delivery = attrs[delivery_date];
@@ -124,6 +123,7 @@ const orderCreate = async (webhook) => {
       }
     });
 
+    // items should now come from shopID base64 lists
     console.log('addOns', addOnProducts);
     console.log('productItems', productItems);
     if (boxItem.subscription && box) {

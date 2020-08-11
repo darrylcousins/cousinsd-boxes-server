@@ -35,24 +35,20 @@ export default function ProductList() {
         );
 
         /*
-          <Editable 
-            key={0}
-            title={product.shopify_title}
-            context={ { shopify: true } }
-            id={product.shopify_gid}
-            fieldName='title'
-            mutation={ShopifyMutations.productUpdate}
-            update={(data) => null}
-            textStyle='strong'
-          />,
         */
         /* datatable stuff */
         const rows = (isLoading || !data) ? Array(3) : data.getAllProducts.map((product) => (
           [
-            <TextStyle 
-              variation="subdued">
-              { product.shopify_title }
-            </TextStyle>,
+            <Editable 
+              key={0}
+              title={product.shopify_title}
+              context={ { shopify: true } }
+              id={product.shopify_gid}
+              fieldName='title'
+              mutation={ShopifyMutations.productUpdate}
+              update={(data) => null}
+              textStyle='strong'
+            />,
             <ContextLink 
               shopifyId={product.shopify_id}
             />,
