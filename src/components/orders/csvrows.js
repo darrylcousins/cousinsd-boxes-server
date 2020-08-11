@@ -86,26 +86,26 @@ const createCsvRows = ({ data, delivered }) => {
 
           }
         }
+        rows.push([
+          //addressArray.join('\n'),
+          SHOP_NAME,
+          boxName,
+          deliveryDate,
+          orderName,
+          '', // run id
+          firstName,
+          lastName,
+          addressLine1,
+          addressLine2,
+          city,
+          postcode,
+          telephone,
+          removedItems.join('\n'),
+          addonItems.join('\n'),
+          deliveryNote,
+          ''
+        ]);
       };
-      rows.push([
-        //addressArray.join('\n'),
-        SHOP_NAME,
-        boxName,
-        deliveryDate,
-        orderName,
-        '', // run id
-        firstName,
-        lastName,
-        addressLine1,
-        addressLine2,
-        city,
-        postcode,
-        telephone,
-        removedItems.join('\n'),
-        addonItems.join('\n'),
-        deliveryNote,
-        ''
-      ]);
     }
   });
   /*

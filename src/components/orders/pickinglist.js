@@ -38,7 +38,7 @@ const createPickingDoc = ({ data, delivered }) => {
             } else {
               productQuantities[lineItem.product.handle] = lineItem.quantity - 1;
             }
-            console.log('produce quantity counter', lineItem.product.handle, lineItem.quantity);
+            //console.log('produce quantity counter', lineItem.product.handle, lineItem.quantity);
           }
         }
         if (lineItem.product.productType == 'Container Box') {
@@ -67,7 +67,7 @@ const createPickingDoc = ({ data, delivered }) => {
               }
             }
           });
-          console.log(attrs[idCode]);
+          //console.log(attrs[idCode]);
         }
       }
     }
@@ -80,7 +80,7 @@ const createPickingDoc = ({ data, delivered }) => {
     rows.push([key, value.toString()]);
   }
   rows.sort(keySort);
-  console.log(JSON.stringify(rows, null, true));
+  //console.log(JSON.stringify(rows, null, true));
   const table = {
       table: {
         body: rows

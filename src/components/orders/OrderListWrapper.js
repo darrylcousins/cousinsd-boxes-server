@@ -149,16 +149,19 @@ export default function OrderListWrapper() {
           let rows = [];
           let count = 0;
           let orderids = [];
+          let uniqueIds = [];
           if (!res.errors) {
             rows = res.data.getOrders.rows;
             count = res.data.getOrders.count;
             orderids = rows.map(el => el.shopify_order_id);
+            console.log(orderids);
+            uniqueIds = [...new Set(orderids)];
           } else {
             console.log('getOrders error', JSON.stringify(res.errors, null, 2));
           }
-          if (orderids.length > 0) {
-            setQuery(BuildOrderQueries.getMainQuery(orderids));
-            setIds(orderids.map(el => el.toString()));
+          if (uniqueIds.length > 0) {
+            setQuery(BuildOrderQueries.getMainQuery(uniqueIds));
+            setIds(uniqueIds.map(el => el.toString()));
           } else {
             setQuery(null);
             setIds([]);
@@ -239,7 +242,7 @@ export default function OrderListWrapper() {
       const query = getQuery(orderids);
       promises.push(makePromise(execute(ShopifyHttpLink, { query })));
     } else {
-      const orderids = rows.map(el => el.shopify_order_id);
+      const orderids = [...new Set(rows.map(el => el.shopify_order_id))];
       for (let i=0; i<pageCount; i++) {
         const query = getQuery(orderids.slice(i*limit, i*limit+limit));
         promises.push(makeThrottledPromise(execute(ShopifyHttpLink, { query }), i+1));
