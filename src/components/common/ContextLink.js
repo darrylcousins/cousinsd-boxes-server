@@ -28,6 +28,6 @@ export default function ContextLink({ shopifyId, title }) {
           </Button>
         );
       }}
-        </Context.Consumer>
+    </Context.Consumer>
   );
 };

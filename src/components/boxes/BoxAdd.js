@@ -10,7 +10,6 @@ import { Mutation } from '@apollo/react-components';
 import { useQuery } from '@apollo/client';
 import { dateOnly } from '../../lib';
 import BoxAddSelectDate from './BoxAddSelectDate';
-import BoxAddSelectName from './BoxAddSelectName';
 import BoxAddSelectProduct from './BoxAddSelectProduct';
 import { CacheQueries, BoxMutations } from '../../graphql/queries';
 

@@ -7,6 +7,8 @@ import Cookies from 'js-cookie';
 import { ApolloProvider } from '@apollo/client';
 import translations from '@shopify/polaris/locales/en.json';
 import { Client } from './../src/graphql/client';
+import { Context, TitleBar } from '@shopify/app-bridge-react';
+import { Redirect } from "@shopify/app-bridge/actions";
 import './order.css';
 
 const MyApp = ({ Component, pageProps }) => {
@@ -23,7 +25,15 @@ const MyApp = ({ Component, pageProps }) => {
         <AppProvider i18n={translations}>
           <ApolloProvider client={Client}>
             <Frame>
-                <Component {...pageProps} />
+              <Component {...pageProps} />
+              <Context.Consumer>
+                { app => {
+                  app.subscribe(Redirect.ActionType.APP, function(redirectData) {
+                      console.log(redirectData.path); // For example, '/settings'
+                  });
+                  return null;
+                }}
+              </Context.Consumer>
             </Frame>
           </ApolloProvider>
         </AppProvider>

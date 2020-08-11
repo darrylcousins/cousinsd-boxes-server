@@ -76,6 +76,7 @@ export default function BoxProductAdd({ boxId, isAddOn, refetch }) {
             <ResourcePicker
               resourceType="Product"
               open={pickerActive}
+              initialQuery='product_type:"Box Produce"'
               allowMultiple={true}
               showHidden={true}
               onSelection={handleResourceSelection}

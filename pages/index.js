@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, Tabs, EmptyState, Loading } from '@shopify/polaris';
-import { TitleBar } from '@shopify/app-bridge-react';
+import { Context, TitleBar } from '@shopify/app-bridge-react';
+import { Redirect } from "@shopify/app-bridge/actions";
 
 const Index = () => {
   return (
