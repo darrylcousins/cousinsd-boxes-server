@@ -30,6 +30,7 @@ const mainQuery = `
             id
             productType
             handle
+            title
           }
           quantity
           customAttributes {
@@ -74,6 +75,7 @@ const exportQuery = `
             id
             productType
             handle
+            title
           }
           quantity
           customAttributes {
