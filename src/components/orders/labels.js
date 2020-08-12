@@ -107,7 +107,7 @@ const createLabelDoc = ({ data, delivered }) => {
             console.log('before', products);
             products = products.filter(el => {
               let title = numberedString(el);
-              return (produce.indexOf(el) > -1);
+              return (produce.indexOf(title) > -1);
             });
             console.log('after', products);
 
