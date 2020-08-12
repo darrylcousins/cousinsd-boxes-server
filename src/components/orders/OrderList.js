@@ -90,12 +90,15 @@ export default function OrderList({ query, input, checkbox, LineCheckbox }) {
                 const buff2 = Buffer.from(base64, 'base64');
                 const res = buff2.toString('utf-8');
                 const productIds = JSON.parse(res);
-                //console.log(productIds);
+                console.log(productIds);
 
                 const addOnProductIds = productIds.a;
                 // include quantity
                 const dislikeProductIds = productIds.d.map(el => [el, 1]);
                 const includeProductIds = productIds.i.map(el => [el, 1]);
+                console.log(addOnProductIds);
+                console.log(dislikeProductIds);
+                console.log(includeProductIds);
 
                 if (new Date(attrs[delivery_date]).toDateString() == deliveryDate) {
                   let lineid = node.id.split('/').pop();
