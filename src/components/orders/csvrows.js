@@ -1,4 +1,3 @@
-import { numberedStringToHandle } from '../../lib';
 
 const createCsvRows = ({ data, delivered }) => {
 
@@ -49,7 +48,7 @@ const createCsvRows = ({ data, delivered }) => {
 
         // XXX TODO check for correct date for box association (hint: uses customAttributes)
         if (node.product.productType === 'Box Produce') {
-          produce.push(node.product.handle);
+          produce.push(node.product.title);
         }
       };
 
@@ -78,8 +77,7 @@ const createCsvRows = ({ data, delivered }) => {
             addonItems = customAttributes[addons].split(',').map(el => el.trim()).filter(el => el !== '');
 
             addonItems = addonItems.filter(el => {
-              const handle = numberedStringToHandle(el);
-              return (produce.indexOf(handle) > -1);
+              return (produce.indexOf(title) > -1);
             });
 
             removedItems = customAttributes[removed].split(',').map(el => el.trim()).filter(el => el !== '');

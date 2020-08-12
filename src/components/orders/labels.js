@@ -69,7 +69,7 @@ const createLabelDoc = ({ data, delivered }) => {
             {});
           console.log(custAttr[delivery_date]);
           if (node.product.productType == 'Box Produce') {
-            produce.push(node.product.handle);
+            produce.push(node.product.title);
           }
         }
         if (lineItems[i].node.product.productType == 'Container Box') {
@@ -96,8 +96,7 @@ const createLabelDoc = ({ data, delivered }) => {
 
             console.log('before', products);
             products = products.filter(el => {
-              const handle = numberedStringToHandle(el);
-              return (produce.indexOf(handle) > -1);
+              return (produce.indexOf(title) > -1);
             });
             console.log('after', products);
 
