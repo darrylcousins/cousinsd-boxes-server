@@ -1,4 +1,4 @@
-import { numberedStringToHandle, keySort } from '../../lib';
+import { parseNumberedString, keySort } from '../../lib';
 
 const createPickingDoc = ({ data, delivered }) => {
 
@@ -48,7 +48,6 @@ const createPickingDoc = ({ data, delivered }) => {
           attrs[including].split(',').forEach(key => {
             product = key.trim();
             if (product.length > 0) {
-              product = product.replace(' ', '-').toLowerCase();
               if (Object.keys(products).indexOf(product) > -1) {
                 products[product] = products[product] + 1;
               } else {
@@ -59,7 +58,7 @@ const createPickingDoc = ({ data, delivered }) => {
           attrs[addons].split(',').forEach(key => {
             product = key.trim();
             if (product.length > 0) {
-              product = numberedStringToHandle(product);
+              product = parseNumberedString(product);
               if (Object.keys(products).indexOf(product) > -1) {
                 products[product] = products[product] + 1;
               } else {

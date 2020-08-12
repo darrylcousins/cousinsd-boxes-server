@@ -52,6 +52,7 @@ const BoxQueries = {
   getBoxesByShopifyBox: gql`
     query getBoxesByShopifyBox($input: BoxShopifyBoxSearchInput!) {
       # input: shopify_product_id, offset, limit
+      # XXX NB only for client because 3 day cut off date
       getBoxesByShopifyBox(input: $input) {
         count
         rows {

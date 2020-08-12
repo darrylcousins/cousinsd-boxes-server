@@ -133,6 +133,7 @@ const resolvers = {
     },
     async getBoxesByShopifyBox(root, { input }, context, info) {
       // used by client side app
+      // XXX NB only for client because 3 day cut off date
       let { shopify_product_id, limit, offset } = input;
       const fields = parseFields(info);
       const include = [];
@@ -142,18 +143,19 @@ const resolvers = {
         attributes: filterFields(fields.rows.shopifyBox).filter(el => el !== 'shopify_product_gid'),
         order: [['shopify_title', 'ASC']]
       });
+      const currentDay = moment().add(3, 'days');
       if (fields.rows.products) include.push(getBoxProductInclude(fields.rows));
       const data = await models.Box.findAndCountAll({
         limit,
         offset,
-        where: { delivered: { [Op.gt]: moment().toDate() } },
+        where: { delivered: { [Op.gt]: currentDay.toDate() } },
         order: [['delivered', 'ASC']],
         distinct: true, // stops the join count on products
         attributes: getBoxAttributes(fields.rows),
         include,
       });
 
-      console.log('got this date to filter on', moment().toDate());
+      console.log('client filtering by date gte:', currentDay.toDate());
 
       return data;
     },

@@ -28,6 +28,7 @@ const mainQuery = `
           id
           name
           fulfillmentStatus
+          sku
           product {
             id
             productType
@@ -73,6 +74,7 @@ const exportQuery = `
         node {
           id
           name
+          sku
           product {
             id
             productType

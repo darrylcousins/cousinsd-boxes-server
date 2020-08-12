@@ -189,6 +189,16 @@ const dateToISOString = (date) => {
 
 const toHandle = (title) => title.replace(/ /g, '-').toLowerCase();
 
+const parseNumberedString = (str) => {
+  // e.g. 'Baby Kale (2)' => 'Baby Kale' 
+  str = str.trim();
+  const match = str.match(/\(\d+\)$/);
+  if (match) {
+    str = str.slice(0, match.index).trim();
+  }
+  return str;
+};
+
 const numberedStringToHandle = (str) => {
   // e.g. 'Baby Kale (2)' => 'baby-kale' 
   str = str.trim();
@@ -208,6 +218,7 @@ const stringToArray = (arr) => arr.split(',')
 module.exports = {
   toHandle,
   numberedStringToHandle,
+  parseNumberedString,
   stringToArray,
   dateOnly,
   UTCDateOnly,

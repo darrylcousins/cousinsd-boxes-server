@@ -1,14 +1,4 @@
-import { numberedStringToHandle, dateToISOString } from '../../lib';
-
-const numberedString = (str) => {
-  // e.g. 'Baby Kale (2)' => 'baby-kale' 
-  str = str.trim();
-  const match = str.match(/\(\d+\)$/);
-  if (match) {
-    str = str.slice(0, match.index).trim();
-  }
-  return str;
-};
+import { parseNumberedString, dateToISOString } from '../../lib';
 
 const createLabelDoc = ({ data, delivered }) => {
 
@@ -108,7 +98,7 @@ const createLabelDoc = ({ data, delivered }) => {
             products = customAttributes[addons].split(',').map(el => el.trim()).filter(el => el !== '');
 
             products = products.filter(el => {
-              let title = numberedString(el);
+              let title = parseNumberedString(el);
               return (produce.indexOf(title) > -1);
             });
 

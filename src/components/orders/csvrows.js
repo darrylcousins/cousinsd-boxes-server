@@ -1,13 +1,4 @@
-
-const numberedString = (str) => {
-  // e.g. 'Baby Kale (2)' => 'baby-kale' 
-  str = str.trim();
-  const match = str.match(/\(\d+\)$/);
-  if (match) {
-    str = str.slice(0, match.index).trim();
-  }
-  return str;
-};
+import { parseNumberedString } from '../../lib';
 
 const createCsvRows = ({ data, delivered }) => {
 
@@ -85,13 +76,13 @@ const createCsvRows = ({ data, delivered }) => {
           deliveryDate = new Date(customAttributes[delivery_date]).toDateString();
           if (deliveryDate === new Date(delivered).toDateString()) {
             const lineItem = lineItems[i].node;
-            boxName = lineItem.name;
+            boxName = lineItem.sku;
 
             includedItems = customAttributes[including].split(',').map(el => el.trim()).filter(el => el !== '');
             addonItems = customAttributes[addons].split(',').map(el => el.trim()).filter(el => el !== '');
 
             addonItems = addonItems.filter(el => {
-              let title = numberedString(el);
+              let title = parseNumberedString(el);
               return (produce.indexOf(title) > -1);
             });
 
