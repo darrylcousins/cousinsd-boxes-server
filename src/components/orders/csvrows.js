@@ -30,14 +30,26 @@ const createCsvRows = ({ data, delivered }) => {
       let address = order.shippingAddress;
       var customer = order.customer;
       let deliveryNote = order.note;
+      let addressLine1 = '';
+      let addressLine2 = '';
+      let city = '';
+      let postcode = '';
+      let firstName = '';
+      let lastName = '';
+      let telephone = '';
 
-      let firstName = address.firstName;
-      let lastName = address.lastName;
-      let addressLine1 = address.address1;
-      let addressLine2 = address.address2;
-      let city = address.city;
-      let postcode = address.zip;
-      let telephone = address.phone ? address.phone : '';
+      if (address) {
+        addressLine1 = address.address1;
+        addressLine2 = address.address2;
+        city = address.city;
+        postcode = address.zip;
+      };
+
+      if (customer) {
+        firstName = customer.firstName;
+        lastName = customer.lastName;
+        telephone = customer.phone ? customer.phone : '';
+      };
 
       let orderName = order.name; // the order number
       let boxName; // the box title
@@ -62,6 +74,7 @@ const createCsvRows = ({ data, delivered }) => {
         }
       };
 
+      let subRows = []
       for (let i = 0; i < itemsLength; i++) {
         /* make list of paid for products to draw upon */
         if (lineItems[i].node.product.productType === 'Container Box') {
@@ -74,15 +87,6 @@ const createCsvRows = ({ data, delivered }) => {
             const lineItem = lineItems[i].node;
             boxName = lineItem.name;
 
-            /*
-            addressArray.push(address.name);
-            addressArray.push(`${address.address1}`)
-            if (address.address2) addressArray.push(`${isNull(address.address2)}`);
-            addressArray.push(`${address.city} ${address.zip}`);
-            if (customer.email) addressArray.push(`${isNull(customer.email)}`);
-            if (customer.phone) addressArray.push(`${isNull(customer.phone)}`);
-            */
-
             includedItems = customAttributes[including].split(',').map(el => el.trim()).filter(el => el !== '');
             addonItems = customAttributes[addons].split(',').map(el => el.trim()).filter(el => el !== '');
 
@@ -94,27 +98,28 @@ const createCsvRows = ({ data, delivered }) => {
             removedItems = customAttributes[removed].split(',').map(el => el.trim()).filter(el => el !== '');
 
           }
+          subRows.push([
+            //addressArray.join('\n'),
+            SHOP_NAME,
+            boxName,
+            deliveryDate,
+            orderName,
+            '', // run id
+            firstName,
+            lastName,
+            addressLine1,
+            addressLine2,
+            city,
+            postcode,
+            telephone,
+            removedItems.join('\n'),
+            addonItems.join('\n'),
+            deliveryNote,
+            ''
+          ]);
         }
       };
-      rows.push([
-        //addressArray.join('\n'),
-        SHOP_NAME,
-        boxName,
-        deliveryDate,
-        orderName,
-        '', // run id
-        firstName,
-        lastName,
-        addressLine1,
-        addressLine2,
-        city,
-        postcode,
-        telephone,
-        removedItems.join('\n'),
-        addonItems.join('\n'),
-        deliveryNote,
-        ''
-      ]);
+      subRows.forEach(row => rows.push(row));
     }
   });
   /*

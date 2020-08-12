@@ -11,6 +11,8 @@ const mainQuery = `
     customer {
       email
       phone
+      firstName
+      lastName
     }
     shippingAddress {
       name

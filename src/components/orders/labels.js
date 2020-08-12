@@ -88,11 +88,15 @@ const createLabelDoc = ({ data, delivered }) => {
           const deliveryDate = dateToISOString(new Date(customAttributes[delivery_date]));
           if (deliveryDate == dateToISOString(new Date(delivered))) {
             const lineItem = lineItems[i].node;
-            stack.push(address.name);
-            stack.push(`${address.address1}`)
-            if (address.address2) stack.push(`${isNull(address.address2)}`);
-            stack.push(`${address.city} ${address.zip}`);
-            if (customer.phone) stack.push(`${isNull(customer.phone)}`);
+            if (address) {
+              stack.push(address.name);
+              stack.push(`${address.address1}`)
+              if (address.address2) stack.push(`${isNull(address.address2)}`);
+              stack.push(`${address.city} ${address.zip}`);
+            }
+            if (customer) {
+              if (customer.phone) stack.push(`${isNull(customer.phone)}`);
+            }
             stack.push(`\n${new Date(delivered).toDateString()} ${order.name}`);
             stack.push(`${lineItem.name}`)
 
