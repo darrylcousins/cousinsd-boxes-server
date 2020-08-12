@@ -64,6 +64,7 @@ export default function LineItemProductList({ idList, produce }) {
           return (produce.indexOf(el.shopify_handle) > -1);
         });
 
+        console.log(products);
         return (
           <ul 
             className={`overflow${ products.length > 1 ? ' listed'  : '' }` }
