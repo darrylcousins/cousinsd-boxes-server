@@ -1,4 +1,14 @@
 
+const numberedString = (str) => {
+  // e.g. 'Baby Kale (2)' => 'baby-kale' 
+  str = str.trim();
+  const match = str.match(/\(\d+\)$/);
+  if (match) {
+    str = str.slice(0, match.index).trim();
+  }
+  return str;
+};
+
 const createCsvRows = ({ data, delivered }) => {
 
   const [delivery_date, including, addons, removed, subscription] = LABELKEYS;
@@ -77,6 +87,7 @@ const createCsvRows = ({ data, delivered }) => {
             addonItems = customAttributes[addons].split(',').map(el => el.trim()).filter(el => el !== '');
 
             addonItems = addonItems.filter(el => {
+              let title = numberedString(el);
               return (produce.indexOf(title) > -1);
             });
 

@@ -1,5 +1,15 @@
 import { numberedStringToHandle, dateToISOString } from '../../lib';
 
+const numberedString = (str) => {
+  // e.g. 'Baby Kale (2)' => 'baby-kale' 
+  str = str.trim();
+  const match = str.match(/\(\d+\)$/);
+  if (match) {
+    str = str.slice(0, match.index).trim();
+  }
+  return str;
+};
+
 const createLabelDoc = ({ data, delivered }) => {
 
   const [delivery_date, including, addons, removed, subscription] = LABELKEYS;
@@ -96,7 +106,8 @@ const createLabelDoc = ({ data, delivered }) => {
 
             console.log('before', products);
             products = products.filter(el => {
-              return (produce.indexOf(title) > -1);
+              let title = numberedString(el);
+              return (produce.indexOf(el) > -1);
             });
             console.log('after', products);
 

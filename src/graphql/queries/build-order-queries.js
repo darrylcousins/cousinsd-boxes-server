@@ -101,6 +101,7 @@ const shortQuery = `
           product {
             productType
             handle
+            title
           }
           quantity
         }
