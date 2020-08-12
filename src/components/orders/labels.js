@@ -77,7 +77,6 @@ const createLabelDoc = ({ data, delivered }) => {
           var custAttr = lineItems[k].node.customAttributes.reduce(
             (acc, curr) => Object.assign(acc, { [`${curr.key}`]: curr.value }),
             {});
-          console.log(custAttr[delivery_date]);
           if (node.product.productType == 'Box Produce') {
             produce.push(node.product.title);
           }
@@ -104,12 +103,10 @@ const createLabelDoc = ({ data, delivered }) => {
             column2.push({ style: 'productheader', text: `${addons}` });
             products = customAttributes[addons].split(',').map(el => el.trim()).filter(el => el !== '');
 
-            console.log('before', products);
             products = products.filter(el => {
               let title = numberedString(el);
               return (produce.indexOf(title) > -1);
             });
-            console.log('after', products);
 
             column2.push({ style: 'product', text: products.join('\n') });
 

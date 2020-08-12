@@ -154,7 +154,6 @@ export default function OrderListWrapper() {
             rows = res.data.getOrders.rows;
             count = res.data.getOrders.count;
             orderids = rows.map(el => el.shopify_order_id);
-            console.log(orderids);
             uniqueIds = [...new Set(orderids)];
           } else {
             console.log('getOrders error', JSON.stringify(res.errors, null, 2));
