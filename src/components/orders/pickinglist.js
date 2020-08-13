@@ -24,6 +24,7 @@ const createPickingDoc = ({ data, delivered }) => {
     let lineItem;
     let attrs;
     let product;
+    let tempTitle;
     for (let j=0; j<length; j++) {
       order = orders[`order${j}`];
       lineItems = order.lineItems.edges;
@@ -33,10 +34,11 @@ const createPickingDoc = ({ data, delivered }) => {
         // XXX TODO check for correct date for box association (hint: uses customAttributes)
         if (lineItem.product.productType == 'Box Produce') {
           if (lineItem.quantity > 1) {
-            if (Object.keys(productQuantities).indexOf(lineItem.product.handle) > -1) {
-              productQuantities[lineItem.product.handle] = productQuantities[lineItem.product.handle] + lineItem.quantity - 1;
+            tempTitle = parseNumberedString(lineItem.product.title);
+            if (Object.keys(productQuantities).indexOf(tempTitle) > -1) {
+              productQuantities[tempTitle] = productQuantities[tempTitle] + lineItem.quantity - 1;
             } else {
-              productQuantities[lineItem.product.handle] = lineItem.quantity - 1;
+              productQuantities[tempTitle] = lineItem.quantity - 1;
             }
             //console.log('produce quantity counter', lineItem.product.handle, lineItem.quantity);
           }
