@@ -143,7 +143,7 @@ const resolvers = {
         attributes: filterFields(fields.rows.shopifyBox).filter(el => el !== 'shopify_product_gid'),
         order: [['shopify_title', 'ASC']]
       });
-      const currentDay = moment().add(3, 'days');
+      const currentDay = moment().add(2, 'days');
       if (fields.rows.products) include.push(getBoxProductInclude(fields.rows));
       const data = await models.Box.findAndCountAll({
         limit,

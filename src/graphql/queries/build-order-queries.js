@@ -22,7 +22,7 @@ const mainQuery = `
       province
       zip
     }
-    lineItems(first: 10) {
+    lineItems(first: 25) {
       edges {
         node {
           id
@@ -69,7 +69,7 @@ const exportQuery = `
       province
       zip
     }
-    lineItems(first: 10) {
+    lineItems(first: 25) {
       edges {
         node {
           id
@@ -95,7 +95,7 @@ const exportQuery = `
 /* just enough information to print picking list */
 const shortQuery = `
   order@idx: order(id: "@id") {
-    lineItems(first: 10) {
+    lineItems(first: 25) {
       edges {
         node {
           customAttributes {

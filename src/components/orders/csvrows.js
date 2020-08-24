@@ -34,12 +34,13 @@ const createCsvRows = ({ data, delivered }) => {
         addressLine2 = address.address2;
         city = address.city;
         postcode = address.zip;
+        telephone = address.phone ? address.phone : '';
       };
 
       if (customer) {
         firstName = customer.firstName;
         lastName = customer.lastName;
-        telephone = customer.phone ? customer.phone : '';
+        telephone = customer.phone ? customer.phone : telephone;
       };
 
       let orderName = order.name; // the order number
