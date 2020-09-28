@@ -140,5 +140,8 @@ module.exports = {
   getMainQuery,
   getShortQuery,
   getExportQuery,
+  mainQuery,
+  shortQuery,
+  exportQuery,
 };
 

@@ -13,6 +13,7 @@ lerna-debug.log*
 trial.js
 trial.mjs
 trial.sh
+data
 
 # vim
 *.swp
